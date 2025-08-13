@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]MegaStor</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+ 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+ 	<link type="text/css" rel="stylesheet" href="~/css/bootstrap.css">
+	<link type="text/css" rel="stylesheet" href="~/css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="~/css/slick-theme.css" />
+	<link type="text/css" rel="stylesheet" href="~/css/nouislider.css" />
+	<link type="text/css" rel="stylesheet" href="~/css/font-awesome.css" />
+	<link type="text/css" rel="stylesheet" href="~/css/style.css" />
+
+
+
+
+ 	<link rel="stylesheet" href="~/75945d6f89aa6662be59a903783c6a8e_logo.png">
+	  
+
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MegaStor.styles.css" asp-append-version="true" />
+	 
+</head>
+<body>
+	<!-- HEADER -->
+	<header>
+		<!-- TOP HEADER -->
+		<div id="top-header">
+			<div class="container">
+				<ul class="header-links pull-left">
+					<li><a href="#"><i class="fa fa-phone"></i>@_configuration["EmailSettings:Phone"]</a></li>
+					<li><a href="#"><i class="fa fa-envelope-o"></i>@_configuration["EmailSettings:FromEmail"]</a></li>
+					<li><a href="#"><i class="fa fa-map-marker"></i>@_configuration["EmailSettings:Adress"]</a></li>
+				</ul>
+				<ul class="header-links pull-right">
+					<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
+
+					@await Html.PartialAsync("_Identity")
+
+ 				</ul>
+			</div>
+		</div>
+		<!-- /TOP HEADER -->
+		<!-- MAIN HEADER -->
+		<div id="header">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- LOGO -->
+					<div class="col-md-3">
+						<div class="header-logo">
+							<a href="#" class="logo d-flex align-items-center" style="text-decoration: none;">
+								<img src="~/75945d6f89aa6662be59a903783c6a8e_logo.png" class="img-fluid" style="max-width: 60px; margin-right: 10px;" alt="">
+								<h3 class="mb-0 " style=" color: white;">MegaStor</h3>
+							</a>
+
+						</div>
+					</div>
+					<!-- /LOGO -->
+					<!-- SEARCH BAR -->
+
+					<div class="col-md-6">
+						<div class="header-search" style="display: flex; align-items: center; gap: 0px;  width: 100%; ">
+
+							<!-- الدروب داون من ViewComponent -->
+							<div style="flex-shrink: 0; " >
+								<div id="button" style="border: none; padding: 10px 15px; border-radius: 25px 0 0 25px; background-color: white; appearance: none; outline: none; cursor: pointer;">
+									<a asp-controller="Product" asp-action="AllProduct" > All Products </a>
+								</div>
+							
+							</div>
+							
+							<!-- فورم البحث -->
+							<form style="display: flex; align-items: center; flex: 1; gap: 1px;" method="get" asp-controller="Search" asp-action="Index">
+								<input name="query" class="input" placeholder="Search here" 
+									   style="flex: 1; min-width: 100px; padding: 6px 10px; font-size: 15px;" />
+								<button type="submit" class="search-btn"  
+										style="padding: 6px 14px; white-space: nowrap;">
+									Search
+								</button>
+							</form>
+
+						</div>
+					</div>
+
+					<!-- /SEARCH BAR -->
+					<!-- ACCOUNT -->
+					<div class="col-md-3 clearfix">
+						<div class="header-ctn">
+
+							<!-- Wishlist -->
+							@await Component.InvokeAsync("WishlistInHomeMenu")
+							<!-- /Wishlist -->
+
+							<!-- Cart -->
+ 							@await Component.InvokeAsync("CarInHomeMenu")
+ 							<!-- /Cart -->
+
+							<!-- Menu Toogle -->
+							<div class="menu-toggle">
+								<a href="#">
+									<i class="fa fa-bars"></i>
+									<span>Menu</span>
+								</a>
+							</div>
+							<!-- /Menu Toogle -->
+						</div>
+					</div>
+					<!-- /ACCOUNT -->
+				</div>
+				<!-- row -->
+			</div>
+			<!-- container -->
+		</div>
+		<!-- /MAIN HEADER -->
+	</header>
+	<!-- /HEADER -->
+ 
+
+	@await Component.InvokeAsync("CategoriesMenu")
+ 
+
+    <div style="min-height:500px;width:100%"  >
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+	<!-- FOOTER -->
+	<footer id="footer">
+		<!-- top footer -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-3 col-xs-6">
+						<div class="footer">
+							<h3 class="footer-title">About Us</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+							<ul class="footer-links">
+								<li><a href="#"><i class="fa fa-map-marker"></i>@_configuration["EmailSettings:Adress"]</a></li>
+								<li><a href="#"><i class="fa fa-phone"></i>@_configuration["EmailSettings:Phone"]</a></li>
+								<li><a href="#"><i class="fa fa-envelope-o"></i>@_configuration["EmailSettings:FromEmail"]</a></li>
+							</ul>
+						</div>
+					</div>
+					 
+					<div class="col-md-3 col-xs-6">
+						<div class="footer">
+							<h3 class="footer-title">Categories</h3>
+							<ul class="footer-links">
+								<li><a href="#">Hot deals</a></li>
+								<li><a href="#">Laptops</a></li>
+								<li><a href="#">Smartphones</a></li>
+								<li><a href="#">Cameras</a></li>
+								<li><a href="#">Accessories</a></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="clearfix visible-xs"></div>
+
+					<div class="col-md-3 col-xs-6">
+						<div class="footer">
+							<h3 class="footer-title">Information</h3>
+							<ul class="footer-links">
+								<li><a href="#">About Us</a></li>
+								<li><a href="#">Contact Us</a></li>
+								<li><a href="#">Privacy Policy</a></li>
+								<li><a href="#">Orders and Returns</a></li>
+								<li><a href="#">Terms & Conditions</a></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="col-md-3 col-xs-6">
+						<div class="footer">
+							<h3 class="footer-title">Service</h3>
+							<ul class="footer-links">
+								<li><a href="#">My Account</a></li>
+								<li><a href="#">View Cart</a></li>
+								<li><a href="#">Wishlist</a></li>
+								<li><a href="#">Track My Order</a></li>
+								<li><a href="#">Help</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /top footer -->
+		<!-- bottom footer -->
+		<div id="bottom-footer" class="section">
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<ul class="footer-payments">
+							<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
+							<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
+							<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
+							<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
+							<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
+							<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
+						</ul>
+						<span class="copyright">
+ 							Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+ 						</span>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /bottom footer -->
+	</footer>
+	<!-- /FOOTER -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+
+	 
+	<!-- jQuery Plugins -->
+
+	<script src="~/js/jquery.js"></script>
+	<script src="~/js/bootstrap.js"></script>
+	<script src="~/js/slick.js"></script>
+	<script src="~/js/nouislider.js"></script>
+	<script src="~/js/jqueryz.js"></script>
+	<script src="~/js/main.js"></script>
+
+	<script src="~/js/Custom.js"></script>
+	<script src="~/js/JavaScript.js"></script>
+
+
+ 	 
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+	 
+    <script src="~/js/site.js" asp-append-version="true"></script>
+ 
+	 
+
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

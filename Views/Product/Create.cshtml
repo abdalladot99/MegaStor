@@ -1,0 +1,241 @@
+﻿@model AddProductViewModel
+
+<div class="container mb-3">
+    <h1>Add New Product</h1>
+
+    <div class="row mt-4">
+        <!-- العمود الأول: صورة المعاينة الرئيسية -->
+        <div  class="col-12 col-md-5">
+            <div>
+                <img id="myImg" class="img-fluid text-end border rounded" width="500" height="400" style="display:none;" />
+            </div>
+        </div>
+ 
+        <!-- العمود الثاني: الفورم -->
+        <div class="col-12 col-md-7">
+            <form method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div>
+                    <label asp-for="ProductName" class="control-label"></label>
+                    <input asp-for="ProductName" class="form-control" />
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Quantity" class="control-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="ProductDescription" class="control-label"></label>
+                    <textarea asp-for="ProductDescription" class="form-control" rows="3" cols="50"></textarea>
+                    <span asp-validation-for="ProductDescription" class="text-danger"></span>
+                </div>
+                 
+
+                <div class="row">
+                    <div class="mt-4 col">
+                        <label asp-for="SubcategoryId" class="form-label">Category:</label>
+                        <select class="form-select" asp-for="SubcategoryId" asp-items="@ViewBag.SubCategores">
+                            <option value="0">All Categories</option>
+                        </select>
+                        <span asp-validation-for="SubcategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <!-- رفع الصورة الرئيسية -->
+                <div class="form-group mt-3">
+                    <label class="form-label">Main Image</label>
+                    <input type="file" asp-for="ClientFile" onchange="liadFile(event)" class="form-control" />
+                    <span asp-validation-for="ClientFile" class="text-danger"></span>
+              
+                </div>
+                 
+
+                <div class="form-group mt-3">
+                    <label class="form-label">Product Images</label>
+
+                    <!-- انبوت الصور الفعلي -->
+                     <input type="file" name="Images" id="ImagesInput" multiple accept="image/*" onchange="previewImages(event)" class="form-control" />
+                      
+                    <!-- الصور المصغرة -->
+                    <div id="imagePreviewWrapper" class="d-flex flex-wrap gap-2 mt-3"></div>
+
+                    <span asp-validation-for="Images" class="text-danger"></span>
+                </div>
+
+
+                <div class="row mt-2">
+                    <div class="col">
+                        <p class="btn btn-primary m-2 w-100" id="yes">Add Discount</p>
+                    </div>
+                    <div class="col" id="content">
+                        <input type="hidden" id="no" asp-for="discount" />
+                    </div>
+                    <span asp-validation-for="discount" class="text-danger"></span>
+                </div>
+
+                <div class="pt-4 text-end">
+                    <button type="submit" class="btn btn-success px-4 py-2">
+                        <i class="bi bi-save"></i> Save Product
+                    </button>
+                </div>
+
+
+            </form>
+            <div class="pt-3 text-start">
+                <a asp-action="Index" asp-controller="Category" class="btn btn-outline-secondary px-4 py-2">
+                    <i class="bi bi-arrow-left-circle"></i> Back to Home
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        var liadFile = function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var myImg = document.getElementById('myImg');
+                myImg.src = reader.result;
+                myImg.style.display = 'block'; // <-- دي الإضافة اللي ناقصاك
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+    </script>
+
+    <script> 
+        function previewImages(event) {
+            const input = event.target;
+            const wrapper = document.getElementById("imagePreviewWrapper");
+            wrapper.innerHTML = "";
+
+            if (input.files) {
+                Array.from(input.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.style.height = "100px";
+                        img.classList.add("rounded", "border", "me-2");
+                        wrapper.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+    </script>
+
+
+
+    @* JavaScript code for add discount for Product *@
+    <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            let Addation = document.getElementById('content');
+            let yes = document.getElementById('yes');
+            let no = document.getElementById('no');
+
+            yes.addEventListener('click', function () {
+
+                if (!document.getElementById('discountInput')) {
+                    let newInput = document.createElement('input');
+                    newInput.name = 'Discount';
+                    newInput.className = 'form-control mt-2 w-80';
+                    newInput.id = 'discountInput';
+                    newInput.placeholder = 'Enter The Discount As a Number';
+
+                    Addation.appendChild(newInput);
+                }
+
+                no.remove();
+            });
+        });
+
+    </script>
+
+
+  
+    <script>
+        const input = document.getElementById("ImagesInput");
+        const wrapper = document.getElementById("imagePreviewWrapper");
+        let fileList = [];
+
+        input.addEventListener("change", (e) => {
+            const files = Array.from(e.target.files);
+
+            // إضافة الملفات بدون تكرار:
+            files.forEach(file => {
+                // نتأكد إنها مش موجودة بالفعل بالاسم والحجم
+                if (!fileList.some(f => f.name === file.name && f.size === file.size)) {
+                    fileList.push(file);
+                }
+            });
+
+            renderPreviews();
+            updateInputFiles();
+        });
+
+        function renderPreviews() {
+            wrapper.innerHTML = "";
+
+            fileList.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const container = document.createElement("div");
+                    container.classList.add("position-relative");
+
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.style.height = "100px";
+                    img.classList.add("rounded", "border", "me-2");
+
+                    const removeBtn = document.createElement("button");
+                    removeBtn.innerHTML = "&times;";
+                    removeBtn.classList.add("btn", "btn-sm", "btn-danger", "position-absolute");
+                    removeBtn.style.top = "0";
+                    removeBtn.style.right = "0";
+                    removeBtn.style.padding = "0 5px";
+                    removeBtn.style.lineHeight = "1";
+
+                    removeBtn.onclick = () => {
+                        fileList.splice(index, 1);
+                        renderPreviews();
+                        updateInputFiles();
+                    };
+
+                    container.appendChild(img);
+                    container.appendChild(removeBtn);
+                    wrapper.appendChild(container);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function updateInputFiles() {
+            const dataTransfer = new DataTransfer();
+            fileList.forEach(file => dataTransfer.items.add(file));
+            input.files = dataTransfer.files;
+        }
+    </script>
+
+
+}
+ 
+

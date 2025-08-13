@@ -1,0 +1,173 @@
+﻿@using MegaStor.Constants.Enum
+@model Order;
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container-fluid">
+
+    <div class="container">
+        <!-- Title -->
+        <div class="d-flex justify-content-between align-items-center py-3">
+            @if (Model.OrderStatus == OrderPlacementStatusEnum.Cancelled)
+            {
+                <h2 class="h5 mb-0 fw-bold">Order Cancelled</h2>
+            }
+            else
+            {
+                <h2 class="h5 mb-0 fw-bold">Order Detail</h2>
+            }
+        </div>
+
+        <!-- Main content -->
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Details -->
+                <div class="card mb-4">
+                    <div class="card-body py-3">
+                        <div class="d-flex justify-content-between">
+                            <div class="w-full d-flex align-items-center justify-content-between">
+                                <span class="me-3">@Model.OrderDate.ToString("dd-MM-yyyy")</span>
+                                <span class="me-3">Shipping:</span>
+                                @if (Model.ShippingStatus == OrderShippingStatusEnum.Pending)
+                                {
+                                    <span class="badge bg-warning">@Model.ShippingStatus</span>
+                                }
+                                else if (Model.ShippingStatus == OrderShippingStatusEnum.FailedDelivery || Model.ShippingStatus == OrderShippingStatusEnum.Cancelled)
+                                {
+                                    <span class="badge bg-danger">@Model.ShippingStatus</span>
+                                }
+                                else if (Model.ShippingStatus == OrderShippingStatusEnum.Delivered)
+                                {
+                                    <span class="badge bg-success">@Model.ShippingStatus</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-primary">@Model.ShippingStatus</span>
+                                }
+                            </div>
+                        </div>
+                        <table class="table table-borderless">
+                            <tbody>
+                                @foreach (var orderItem in Model.OrderItems!)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex mb-2">
+                                                <div class="flex-shrink-0">
+                                                    <img src="@orderItem.Product.ProductImages.FirstOrDefault()?.ImageURL" alt="" width="35" class="img-fluid">
+                                                </div>
+                                                <div class="flex-lg-grow-1 ms-3">
+                                                    <h6 class="small mb-0"><a href="#" class="text-reset">@orderItem.Product.Name</a></h6>
+                                                 </div>
+                                            </div>
+                                        </td>
+                                        <td>@orderItem.Quantity</td>
+                                        <td class="text-end">$@orderItem.TotalPrice</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">Subtotal</td>
+                                    <td class="text-end">$@Model.TotalAmount</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Shipping</td>
+                                    <td class="text-end">$00.00</td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td colspan="2">TOTAL</td>
+                                    <td class="text-end">$@Model.TotalAmount</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- Payment -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row pt-3">
+                            <div class="col-lg-6">
+                                <h3 class="h6">Payment Method</h3>
+                                <p>
+                                    @Model.Payment.PaymentMethod <br>
+                                    Total: $@Model.Payment.Amount
+                                    @if (Model.OrderStatus != OrderPlacementStatusEnum.Cancelled && Model.Payment.PaymentStatus == "Success")
+                                    {
+                                        <span class="badge bg-success rounded-pill">PAID</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary rounded-pill">Pending</span>
+                                    }
+                                </p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h3 class="h6">Billing address</h3>
+                                <address>
+                                    <strong>@Model.BillingAddress.FirstName @Model.BillingAddress.LastName</strong><br>
+                                    @Model.BillingAddress.Address<br>
+                                    @Model.BillingAddress.EmailAddress<br>
+                                    <abbr title="Phone">P:</abbr> @Model.BillingAddress.PhoneNumber
+                                </address>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a asp-action="GetMyOrders" asp-controller="Order" asp-route-id="@Model.CustomerId" class="btn My-btn-outline">Back</a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="card mb-4 py-3">
+                    <!-- Shipping information -->
+                    <div class="card-body">
+                        <h3 class="h6">Shipping Information</h3>
+                        <hr>
+                        <h3 class="h6">Address</h3>
+                        <address>
+                            <strong>@Model.ShippingAddress.FirstName @Model.ShippingAddress.LastName</strong><br>
+                            @Model.ShippingAddress.Address<br>
+                            @Model.ShippingAddress.EmailAddress<br>
+                            <abbr title="Phone">P:</abbr> @Model.ShippingAddress.PhoneNumber
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+    }
+
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: 1rem;
+    }
+
+    .text-reset {
+        --bs-text-opacity: 1;
+        color: inherit !important;
+    }
+
+    a {
+         text-decoration: none;
+    }
+
+</style>

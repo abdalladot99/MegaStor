@@ -1,0 +1,62 @@
+﻿@model CartViewModel
+ 
+@{
+
+	ViewBag.Title = "CAR PRODUCT";
+
+	// var total = Model.Sum(p => p.pricediscount * p.Quantity);
+
+	var shipping = _configuration.GetValue<decimal>("StoreSettings:ShippingFee");
+
+}
+ 
+<!-- Cart -->
+<div class="dropdown">
+	<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+		<i class="fa fa-shopping-cart"></i>
+		<span>Your Cart</span>
+		<div class="qty">@Model.TotalQuantity</></div>
+	</a>
+	<div class="cart-dropdown">
+		<div class="cart-list">
+		 
+			@foreach (var item in Model.CartItems)
+			{
+				
+				<div class="product-widget">
+					<div class="product-img">
+						<img src="~/img/@item.ImageItem" alt="">
+					</div>
+					<div class="product-body">
+						<h3 class="product-name"><a href="#">@item.NameItem</a></h3>
+						<h4 class="product-price"><span class="qty">@item.Quantity x</span>@item.pricediscount</h4>
+					</div>
+
+					<button onclick="DeleteNow(@item.CarItemId,'/Cart/DeleteItem')" class="delete"><i class="fa fa-close"></i></button>
+
+					 
+				</div>
+			}
+			
+		</div>
+	 
+		<div class="cart-summary">
+			<small>
+				@Model.TotalQuantity
+				Item(s) selected
+			</small>
+			<h5>
+				SUBTOTAL: 
+				$ @Model.TotalAmount
+			</h5>
+		</div>
+
+		<div class="cart-btns">
+			<a asp-controller="Cart" asp-action="Index">View Cart</a>
+			<a asp-controller="Order" asp-action="Checkout" >Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+		</div>
+
+	</div>
+</div>
+ 
+

@@ -1,0 +1,92 @@
+﻿@model IEnumerable<MegaStor.Models.Category>
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <h3 class="mb-0">Category & subCategory</h3>
+    <a asp-controller="Category" asp-action="Create" class="btn btn-primary mt-2 mt-sm-0"><i class="bi bi-plus-circle"></i> Add Category  </a>
+</div>
+
+<div class="table-responsive mt-3">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th> </th>
+                <th>Category Name</th>
+                <th>Actions</th>
+                <th>Sub Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="/img/@p.ImgUrl" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;" alt="No Image" />
+                    </td>
+                    <td>@p.Name</td>
+                    <td>
+                        <a asp-controller="SubCategory" asp-action="Create" asp-route-id="@p.Id"
+                           class="btn btn-sm btn-outline-info edit-btn" title="Add Sub Category">
+                            <i class="bi bi-plus-circle-dotted"></i>
+                        </a>
+                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@p.Id"
+                           class="btn btn-sm btn-outline-info edit-btn" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a asp-controller="Category" asp-action="Details" asp-route-id="@p.Id"
+                           class="btn btn-sm btn-outline-secondary view-btn" title="View">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <button onclick="showAlert(@p.Id,'/Category/Delete')" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                    </td>
+
+                    <td class="col-5">
+                        @foreach (var pIn in p.SubCategories)
+                        {
+                            <ul>
+                                <li class="row">
+									<div class="col">
+
+										<a asp-controller="SubCategory" asp-action="Details" asp-route-id="@pIn.SubCategoryId">
+											<img src="/img/@pIn.ImgUrl" style="width: 25px; height: 25px; object-fit: cover; border-radius: 50%;" alt="" />
+											Sub - @pIn.CategoryName
+										</a>
+                                    </div>
+                                      <div class="col">
+										    <a asp-controller="Product" asp-action="Create" asp-route-id="@p.Id"
+										       class="btn btn-sm btn-outline-info edit-btn" title="Add Product">
+											    <i class="bi bi-plus-circle-dotted"></i>
+										    </a>
+										    <a asp-controller="SubCategory" asp-action="Edit" asp-route-id="@pIn.SubCategoryId"
+										       class="btn btn-sm btn-outline-info edit-btn" title="Edit">
+											    <i class="bi bi-pencil-square"></i>
+										    </a>
+                                              <a asp-controller="SubCategory" asp-action="Details" asp-route-id="@pIn.SubCategoryId"
+										       class="btn btn-sm btn-outline-secondary view-btn" title="View">
+											    <i class="bi bi-eye"></i>
+										    </a>
+
+                                            <button onclick="showAlert('@pIn.SubCategoryId','/SubCategory/Delete')" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+
+                                      </div>
+                                    
+                                </li>
+                            </ul>
+                            
+                                
+ 
+                        }
+                    </td>
+
+                 </tr>
+              }
+        </tbody>
+    </table>
+</div>
+
+ 
+@section Scripts {
+    <script src="~/js/Custom.js" asp-append-version="true"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

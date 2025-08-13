@@ -1,0 +1,122 @@
+﻿@model ApplicationUser
+ 
+<div class="account-page">
+    <div class="container">
+        <!-- Page Header -->
+        <div class=" text-center mb-1">
+            <h1 class="page-title">@ViewBag.Action</h1>
+            <p class="page-subtitle">Manage your profile and account settings</p>
+        </div>
+
+        @await Component.InvokeAsync("AccountInformation")
+
+
+        <div class="row">
+
+            @await Html.PartialAsync("_QuickActionsInProfile")
+
+
+
+            <!-- Edit Profile Modal -->
+ 
+                    <div class="password-card card border-0 shadow-sm mb-4 col-lg">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Profile Information</h5>
+                            <a asp-controller="AccountServices" asp-action="MyAccount" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></a>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-controller="AccountServices" asp-action="EditProfile" method="post" id="profileForm" enctype="multipart/form-data">
+
+                            <div class="col-12 col-sm-auto mb-3">
+                                <div class="mx-auto" style="width: 140px;">
+                                <div class="d-flex justify-content-center align-items-center rounded position-relative" >
+                                        <img src="~/img/@Model.ImgUser" style="width:160px;height:160px;border-radius:50%;border: 4px solid white;box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);" " id="profilePicPreview" alt="Profile">
+                                        <i id="removeIcon" class="bi bi-x-octagon-fill text-danger" style="display:none; font-size: 30px; cursor: pointer; position: absolute; top: -5px; right: 0;"></i>
+                                    </div>
+                                </div>
+                            </div>
+ 
+                            <div class="d-flex justify-content-center align-items-center rounded position-relative mt-2">
+                                    <button  class="btn My-btn" type="button" id="plusIcon">
+                                        <i class="fa fa-fw fa-camera"></i>
+                                        <span>Change Photo</span>
+                                    </button>
+                                    <input type="file" id="profilePicInput" name="ProfilePic" style="display:none;" accept="image/*" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="FullName"  class="form-label">Full Name</label>
+                                     <input type="text" class="form-control" id="fullName" asp-for="FullName" value="@Model.FullName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="UserName"  class="form-label">User Name </label>
+                                    <input type="text" class="form-control"  asp-for="UserName" value="@Model.UserName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" asp-for="Email" value="@Model.Email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phoneNumber" asp-for="PhoneNumber" value="@Model.PhoneNumber">
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Address" class="form-label">Address</label>
+                                    <textarea class="form-control" id="address" asp-for="Address" rows="3">@Model.Address</textarea>
+                                </div>
+                                <div class="d-grid gap-2 mt-4">
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                 </div>
+
+                                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                                <input type="hidden" asp-for="ImgUser" value="@Model.ImgUser" />
+                            </form>
+                        </div>
+                    </div>
+ 
+
+
+
+        </div>
+    </div>
+</div>
+ 
+ 
+@section Scripts {
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+                // Trigger file input click when plus icon is clicked
+        $('#plusIcon').on('click', function () {
+            $('#profilePicInput').click();  // This opens the file selection window
+        });
+
+                // When an image is selected in the file input
+        $('#profilePicInput').on('change', function (e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                        reader.onload = function (e) {
+                    // Hide plus icon, show image preview and remove (cross) icon
+                    // $('#plusIcon').hide();
+                    $('#profilePicPreview').attr('src', e.target.result).show();
+                    $('#removeIcon').show();
+                };
+                reader.readAsDataURL(file);
+            }
+            });
+                // Remove the image when the remove (cross) icon is clicked
+                $('#removeIcon').on('click', function () {
+                    // Clear the file input
+                    $('#profilePicInput').val(null);
+                    // Hide the image preview and remove (cross) icon, show the plus icon
+                    $('#profilePicPreview').hide();
+                    $('#removeIcon').hide();
+                    // $('#plusIcon').show();
+                });
+            });
+
+    </script>
+}

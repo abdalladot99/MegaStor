@@ -1,0 +1,101 @@
+﻿@model ApplicationUser
+@{
+    ViewData["Title"] = $"Welcome {Model.FullName}";
+}
+
+<div class="welcome-container">
+    <div class="welcome-card">
+        <div class="welcome-icon">
+            <i class="bi bi-patch-check-fill text-gradient-primary"></i>
+        </div>
+
+        <h1 class="welcome-title">Welcome, @Model.FullName! <span class="welcome-emoji">👋</span></h1>
+
+        <p class="welcome-message">
+            Your account has been successfully authenticated.<br />
+            We're excited to have you with us!
+        </p>
+
+        <div class="welcome-actions">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-primary btn-lg">
+                <i class="bi bi-house-door me-2"></i> Go to Homepage
+            </a>
+            <a asp-action="MyAccount" asp-controller="AccountServices" class="btn btn-outline-secondary btn-lg mt-3">
+                <i class="bi bi-person-circle me-2"></i> View Profile
+            </a>     
+        </div>
+    </div>
+</div>
+
+<style>
+    .welcome-container {
+        min-height: 80vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+        padding: 20px;
+    }
+
+    .welcome-card {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        border: none;
+    }
+
+    .welcome-icon {
+        font-size: 5rem;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-title {
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-size: 2.2rem;
+    }
+
+    .welcome-emoji {
+        font-style: normal;
+    }
+
+    .welcome-message {
+        color: #7f8c8d;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .welcome-actions .btn {
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: 500;
+        width: 100%;
+    }
+
+    .text-gradient-primary {
+        background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    @@media (max-width: 576px) {
+        .welcome-card {
+            padding: 30px 20px;
+        }
+
+        .welcome-title {
+            font-size: 1.8rem;
+        }
+    }
+</style>

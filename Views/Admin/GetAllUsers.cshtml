@@ -1,0 +1,137 @@
+﻿@model List<ShowUsersViewModel>
+
+@{
+    var groupedRoles = Model
+        .GroupBy(u => u.Role)
+        .Select(g => new { Role = g.Key, Count = g.Count() })
+        .ToList();
+
+    var roleLabels = groupedRoles.Select(r => r.Role).ToList();
+    var roleCounts = groupedRoles.Select(r => r.Count).ToList();
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="container mt-4">
+
+     <div class="row mb-5 justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="mb-3">User Roles Distribution</h5>
+                    <div style="position: relative; height: 350px;">
+                        <canvas id="usersChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="row mb-3">
+        <div class="col text-end">
+            <a asp-controller="AccountSettings" asp-action="Register" class="btn btn-outline-secondary">
+                <i class="bi bi-person-plus-fill"></i> Create New User
+            </a>
+        </div>
+    </div>
+
+     <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Email</th>
+                        <th>PhoneNumber</th>
+                        <th>DateCreated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="/img/@item.ImgUrl" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;" alt="No Image" />
+                            </td>
+                            <td>@item.UserName</td>
+                            <td>@item.Role</td>
+                            <td>@item.Email</td>
+                            <td>@item.PhoneNumber</td>
+                            <td>@item.DateCreated</td>
+                            <td>
+                                <a  href="#" class="btn btn-sm btn-outline-info" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-outline-secondary" title="View">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                @if (User.IsInRole("Admin")&&User.IsInRole("MainAdmin"))
+                                {
+                                    <button onclick="showAlert('@item.Id', '/Admin/DeleteUser')" class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+
+                                    <a class="btn btn-sm btn-outline-warning" asp-controller="Admin" asp-action="ChangeUserRole" asp-route-Id="@item.Id" title="Change Role">
+                                        <i class="bi bi-shield-lock"></i> 
+                                    </a>
+
+                                    <a class="btn btn-sm btn-outline-success" asp-controller="Admin" asp-action="AddRoleForUser" asp-route-Id="@item.Id" title="Add Role">
+                                        <i class="bi bi-person-plus"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+         </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/Custom.js" asp-append-version="true"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        const ctxUsers = document.getElementById('usersChart').getContext('2d');
+        const usersChart = new Chart(ctxUsers, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(roleLabels)),
+                datasets: [{
+                    label: 'Users by Role',
+                    data: @Html.Raw(Json.Serialize(roleCounts)),
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,104 @@
+﻿@model DetailsCategoryViewModel
+<div class="container m-3 ">
+    <div class="row mt-4">
+        <!-- العمود الأول -->
+        <div class="col-12 col-md-7">
+            <h3>Edit Sub Category</h3>
+            <form asp-controller="Category" asp-action="Edit" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div>
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <div class="form-group row mt-3 ">
+                            <P class="btn btn-primary m-2 col" id="yes">change image .</P>
+                        </div>
+
+                        <div id="myElement">
+                            <input type="hidden" id="no" asp-for="ImgUrl" />
+                        </div>
+
+                        <span asp-validation-for="ImgUrl" class="text-danger"></span>
+                    </div>
+
+                    <div>
+                        <input type="hidden" asp-for="ImgUrl" />
+                    </div>
+
+                    <div>
+                        <input type="hidden" asp-for="CategoryId
+" />
+                    </div>
+
+                    <div class="pt-4">
+                        <input type="submit" value="Save" class="btn btn-success" />
+                    </div>
+                </div>
+            </form>
+            <div class="pt-3">
+                <a asp-action="Index" asp-controller="Category">Back to HOME</a>
+            </div>
+        </div>
+
+        <!-- العمود الثاني -->
+        @if (Model.ImgUrl == null)
+        {
+            <div class="col-12 col-md-5">
+                <img id="myImg" class="img-fluid text-end" width="500" height="400" />
+            </div>
+        }
+        else
+        {
+            <div class="col-12 col-md-5">
+                <img src="~/img/@Model.ImgUrl" id="myImg" class="img-fluid text-end" width="500" height="400" />
+            </div>
+        }
+
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        var liadFile = function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var myImg = document.getElementById('myImg');
+                myImg.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            let targetElement = document.getElementById(`myElement`);
+            let yes = document.getElementById(`yes`);
+            let no = document.getElementById(`no`);
+
+            yes.addEventListener('click', function () {
+
+                let newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.name = 'formFile';
+
+                newInput.setAttribute('onchange', 'liadFile(event)');
+
+                targetElement.appendChild(newInput);
+                no.remove();
+
+            });
+        });
+    </script>
+
+}
+
+
+
+

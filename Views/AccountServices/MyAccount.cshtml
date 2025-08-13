@@ -1,0 +1,366 @@
+﻿@model AccountViewModel
+
+<div class="account-page">
+    <div class="container">
+        <!-- Page Header -->
+        <div class=" text-center mb-1">
+            <h1 class="page-title">My Account</h1>
+            <p class="page-subtitle">Manage your profile and account settings</p>
+        </div>
+
+        @await Component.InvokeAsync("AccountInformation")
+
+
+        <div class="row">
+
+            @await Html.PartialAsync("_QuickActionsInProfile")
+
+        </div>
+    </div>
+</div>
+
+<!-- Change Profile Image Modal -->
+<div class="modal fade" id="changeImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Profile Picture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="imageUploadForm" asp-controller="AccountSettings" asp-action="ChangeProfileImage" method="post" enctype="multipart/form-data">
+                    <div class="text-center mb-4">
+                        <div class="image-preview-container">
+                            <img id="imagePreview" src="~/img/@Model.ProfileImageUrl" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" alt="Preview">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="profileImage" class="form-label">Upload new image</label>
+                        <input class="form-control" type="file" id="profileImage" name="profileImage" accept="image/*" required>
+                        <div class="form-text">Max file size: 2MB. Allowed formats: JPG, PNG, GIF</div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Upload Image</button>
+                        <button type="button" class="btn btn-outline-danger" id="removeImageBtn">Remove Current Image</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="AccountSettings" asp-action="EditProfile" method="post" id="profileForm">
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" name="fullName" value="@Model.FullName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" value="@Model.Email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" value="@Model.PhoneNumber">
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="3">@Model.Address</textarea>
+                    </div>
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .account-page {
+        padding: 2rem 0 4rem;
+        background-color: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        padding-bottom: 1.5rem;
+    }
+
+    .page-title {
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+        color: #7f8c8d;
+        font-size: 1.1rem;
+    }
+
+    .profile-card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .profile-image-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .profile-image {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-change-image {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #4a6bff;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s;
+    }
+
+        .btn-change-image:hover {
+            background: #3a56d4;
+            transform: scale(1.1);
+        }
+
+    .profile-name {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-top: 1rem;
+    }
+
+    .profile-role {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+        font-weight: 500;
+    }
+
+    .profile-stats {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin-top: 1.5rem;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #4a6bff;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: #7f8c8d;
+    }
+
+    .quick-actions-card {
+        border-radius: 12px;
+    }
+
+    .btn-action {
+        border-radius: 8px;
+        padding: 0.6rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+        .btn-action i {
+            font-size: 1.1rem;
+        }
+
+    .account-info-card, .password-card {
+        border-radius: 12px;
+    }
+
+    .info-item {
+        display: flex;
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+    .info-label {
+        font-weight: 600;
+        color: #2c3e50;
+        width: 180px;
+    }
+
+    .info-value {
+        color: #34495e;
+    }
+
+    .password-strength .progress-bar {
+        transition: width 0.3s;
+    }
+
+    .toggle-password {
+        border-radius: 0 6px 6px 0 !important;
+    }
+
+    .image-preview-container {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 4px solid #f1f2f6;
+    }
+
+    @@media (max-width: 768px) {
+        .info-item {
+            flex-direction: column;
+        }
+
+        .info-label {
+            width: 100%;
+            margin-bottom: 0.25rem;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            document.querySelectorAll('.toggle-password').forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.parentElement.querySelector('input');
+                    const icon = this.querySelector('i');
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    icon.classList.toggle('bi-eye');
+                    icon.classList.toggle('bi-eye-slash');
+                });
+            });
+
+            // Password strength indicator
+            const newPasswordInput = document.getElementById('newPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const passwordStrengthBar = document.getElementById('passwordStrengthBar');
+            const passwordMatchIndicator = document.getElementById('passwordMatch');
+
+            newPasswordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+
+                // Length check
+                if (password.length >= 8) strength += 25;
+
+                // Contains uppercase
+                if (/[A-Z]/.test(password)) strength += 25;
+
+                // Contains lowercase
+                if (/[a-z]/.test(password)) strength += 25;
+
+                // Contains number or special char
+                if (/[0-9]/.test(password) || /[^A-Za-z0-9]/.test(password)) strength += 25;
+
+                passwordStrengthBar.style.width = strength + '%';
+
+                // Update color based on strength
+                if (strength < 50) {
+                    passwordStrengthBar.className = 'progress-bar bg-danger';
+                } else if (strength < 75) {
+                    passwordStrengthBar.className = 'progress-bar bg-warning';
+                } else {
+                    passwordStrengthBar.className = 'progress-bar bg-success';
+                }
+
+                // Check password match
+                checkPasswordMatch();
+            });
+
+            confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+            function checkPasswordMatch() {
+                if (newPasswordInput.value && confirmPasswordInput.value) {
+                    if (newPasswordInput.value === confirmPasswordInput.value) {
+                        passwordMatchIndicator.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Passwords match';
+                    } else {
+                        passwordMatchIndicator.innerHTML = '<i class="bi bi-exclamation-circle-fill text-danger"></i> Passwords do not match';
+                    }
+                } else {
+                    passwordMatchIndicator.innerHTML = '';
+                }
+            }
+             
+            // Form validation
+            document.getElementById('passwordForm').addEventListener('submit', function(e) {
+                if (newPasswordInput.value !== confirmPasswordInput.value) {
+                    e.preventDefault();
+                    alert('New password and confirmation do not match!');
+                    return;
+                }
+
+                if (newPasswordInput.value.length < 8) {
+                    e.preventDefault();
+                    alert('Password must be at least 8 characters long!');
+                    return;
+                }
+            });
+
+            // AJAX form submission for image upload
+            document.getElementById('imageUploadForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('profileImagePreview').src = data.imageUrl + '?' + new Date().getTime();
+                        bootstrap.Modal.getInstance(document.getElementById('changeImageModal')).hide();
+                        alert('Profile image updated successfully!');
+                    } else {
+                        alert(data.message || 'Error updating profile image');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating the profile image');
+                });
+            });
+        });
+    </script>
+}

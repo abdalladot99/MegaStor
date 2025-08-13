@@ -1,0 +1,105 @@
+﻿@model ShowUsersViewModel
+
+@{
+    ViewData["Title"] = "Change UserRole";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Change Role</h4>
+                </div>
+
+                <div class="card-body">
+                    <form id="editUserForm" method="post" asp-action="ChangeUserRole">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="form-label">Username</label>
+                            <input asp-for="UserName" class="form-control" readonly />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" readonly />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                            <input asp-for="PhoneNumber" class="form-control" readonly />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Role" class="form-label">Role</label>
+                            <select asp-for="Role" class="form-control" asp-items="ViewBag.Roles">
+                                <option value="">-- Choose Role --</option>
+                            </select>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer text-center">
+                    <a asp-action="GetAllUsers" asp-controller="Admin" class="btn btn-link">Back to User List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+ 
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        document.getElementById("editUserForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            fetch('/Admin/ChangeUserRole', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Something went wrong");
+                return response.text();
+            })
+            .then(data => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'The role has been changed successfully ',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Try again',
+                    text: error.message
+                });
+            });
+        });
+    </script>'
+    
+  
+}
+
+

@@ -1,0 +1,255 @@
+﻿@using MegaStor.Constants.Enum
+@model SellersDashboardContentsViewModel
+@{
+     
+    var processingCount = Model.Orders.Count(o => o.Order.OrderStatus == OrderPlacementStatusEnum.Processing);
+    var completedCount = Model.Orders.Count(o => o.Order.OrderStatus == OrderPlacementStatusEnum.Completed);
+    var cancelledCount = Model.Orders.Count(o => o.Order.OrderStatus == OrderPlacementStatusEnum.Cancelled);
+ 
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+ 
+     <link href="~/css/StyleSheetSeler.css" rel="stylesheet">
+ 
+ 
+</head>
+<body>
+    <div class="container py-4">
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Dashboard Content -->
+            <div class="container-fluid">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="row">
+                    <div class="col-12">
+                        <h2 class="mb-4">Seller Dashboard</h2>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="col-lg-8">
+                        <div class="row">
+
+                            <!-- Total Products -->
+                            <div class="col-sm-12 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Total Products
+                                        </div>
+                                        <h4 class="font-weight-bold">@Model.Products.Count()</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total Orders -->
+                            <div class="col-sm-12 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Total Orders
+                                        </div>
+                                        <h4 class="font-weight-bold">@Model.Orders.Count()</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pending Orders -->
+                            <div class="col-sm-12 col-md-6 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Pending Orders
+                                        </div>
+                                        <h4 class="font-weight-bold">
+                                            @Model.Orders.Count(a => a.Order.OrderStatus == OrderPlacementStatusEnum.Pending)
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total Order Price -->
+                            <div class="col-sm-12 col-md-6 mb-4">
+                                <div class="card border-left-danger shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                            Total Order Price
+                                        </div>
+                                        <h4 class="font-weight-bold">
+                                            $ @Model.Orders.Sum(a => a.Order.TotalAmount)
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Orders Chart -->
+                    <div class="col-lg-4 d-flex align-items-center">
+                        <div style="width: 100%;">
+                            <canvas id="ordersChart"></canvas>
+                            <h5 class="text-center m-2">Order Status</h5>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- My Products Section -->
+                <div id="products" class="py-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4>My Products</h4>
+                        <a href="/Product/Create" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Add Product
+                        </a>
+                    </div>
+
+                    <div class="row">
+                        <!-- Product 1 -->
+                       @foreach (var item in Model.Products)
+                       {
+                                <!-- Product -->
+                             <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                                 <div class="product-card card h-100">
+                                      @await Html.PartialAsync("_ViewProductForSeller",item)
+                                 </div>
+                             </div>
+                       }
+                      
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="orders" class="py-4">
+                    <h4 class="mb-4">Orders</h4>
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h6 class="m-0 font-weight-bold text-primary">Recent Orders</h6>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                    Filter
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#">All Orders</a></li>
+                                    <li><a class="dropdown-item" href="#">Pending</a></li>
+                                    <li><a class="dropdown-item" href="#">Completed</a></li>
+                                    <li><a class="dropdown-item" href="#">Cancelled</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Prodcut Name</th>
+                                            <th>UnitPrice</th>
+											<th>TotalPrice</th>
+											<th>Quantity</th> 
+											<th>Date</th> 
+                                            <th>Customer</th> 
+                                            <th>Status</th>
+
+                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Orders)
+                                        {
+                                            <tr>
+
+                                                <td>@item.Id</td>
+                                                <td>@item.Product.Name</td>
+                                                <td>@item.UnitPrice</td>
+                                                <td>@item.TotalPrice</td>
+                                                <td>@item.Quantity</td>
+                                                <td>@item.Order.OrderDate</td>
+                                                <td>@item.Order.Customer.FullName</td>
+                                                <td>
+                                                    @if (item.Order.OrderStatus == OrderPlacementStatusEnum.Cancelled)
+                                                    {
+                                                        <span class="badge bg-danger text-light">@item.Order.OrderStatus</span>
+                                                    }
+                                                    else if (item.Order.OrderStatus == OrderPlacementStatusEnum.Completed)
+                                                    {
+                                                        <span class="badge bg-success text-light">@item.Order.OrderStatus</span>
+                                                    }
+                                                    else if (item.Order.OrderStatus == OrderPlacementStatusEnum.Processing)
+                                                    {
+                                                        <span class="badge bg-success text-light">@item.Order.OrderStatus</span>
+                                                    }
+
+                                                </td>
+                                                 
+                                                 
+                                            </tr>
+                                        }
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings Section -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    var ctx = document.getElementById('ordersChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Processing', 'Completed', 'Cancelled'],
+                            datasets: [{
+                                data: [@processingCount, @completedCount, @cancelledCount],
+                                backgroundColor: ['#f1c40f', '#2ecc71', '#e74c3c']
+                            }]
+                        }
+                    });
+                </script>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Simple navigation between sections
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if(this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Hide all sections
+                    document.querySelectorAll('.container-fluid > div').forEach(section => {
+                        section.style.display = 'none';
+                    });
+
+                    // Show target section
+                    document.getElementById(targetId).style.display = 'block';
+                }
+            });
+        });
+
+        // Show dashboard by default
+        document.getElementById('dashboard').style.display = 'block';
+    </script>
+</body>
+</html>

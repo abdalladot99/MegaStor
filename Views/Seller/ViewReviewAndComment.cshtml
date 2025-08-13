@@ -1,0 +1,146 @@
+﻿@model ViewReviewAndCommentViewModel
+@{
+    double avgRating = Model.Product.AverageRating;
+    int fullStars = (int)avgRating;
+    bool halfStar = avgRating - fullStars >= 0.5;
+    int emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment & Rewiews</title> 
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .product-img {
+            max-height: 400px;
+            object-fit: contain;
+        }
+
+        .rating .bi {
+            font-size: 1.2rem;
+        }
+
+        .review-card {
+            border-left: 4px solid #0d6efd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container my-5">
+        <!-- Product Info -->
+        <div class="row bg-white p-4 rounded shadow-sm">
+            <div class="col-md-5 text-center">
+               <a asp-controller="Product" asp-action="Details" asp-route-id="@Model.Product.Id">
+                   <img src="~/img/@Model.Product.ImageUrl" class="img-fluid rounded product-img" alt="Product Name">
+               </a>
+               </div>
+            <div class="col-md-5">
+                <h2 class="fw-bold">@Model.Product.Name</h2>
+              
+                <div class="d-flex justify-content-between mb-2">
+                    <h4 class="text-success">Price:</h4>
+                    <span class="text-muted">$@Model.Product.Price</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <h4 class="text-success">Discount:</h4>
+                    <span class="text-muted">$@Model.Product.discount</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <h4 class="text-success">Price After Discount:</h4>
+                    <span class="text-muted">$@Model.Product.DiscountPrice</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+					<h5 class="text-muted">@Model.Product.Description</h5>
+
+                </div>
+
+                <!-- Rating -->
+                <div class="rating mb-3">
+                    @for (int i = 0; i < fullStars; i++)
+                    {
+                        <i class="bi bi-star-fill text-warning"></i>
+                    }
+                    @if (halfStar)
+                    {
+                        <i class="bi bi-star-half text-warning"></i>
+                    }
+                    @for (int i = 0; i < emptyStars; i++)
+                    {
+                        <i class="bi bi-star text-warning"></i>
+                    }
+                    <span class="ms-2 text-secondary">(@Model.Product.AverageRating)</span>
+                </div> 
+            </div>
+        </div>
+
+        <!-- Customer Reviews -->
+        <div class="mt-5">
+            <h4 class="fw-bold mb-4">Customer Reviews</h4>
+  		    @if (Model.Product.Reviews.Count==0)
+			{ 									
+                <h3> 				
+                    No Review And comment	 
+                </h3> 							
+ 			}
+			else 
+			{ 	
+                @foreach (var item in Model.ReviewAndComment)
+                {
+                    <!-- Review -->
+                    <div class="card review-card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <strong>@item.Customer.FullName @if(item.Customer.Id==userId){<strong>(You)</strong>}  </strong>
+                                <small class="text-muted">@item.CreatedAt.ToString("dd/MM/yyyy hh:mm tt")</small>
+                                @if (User.IsInRole("Admin") && User.IsInRole("MainAdmin"))
+                                {
+                                   <button onclick="showAlert(@item.Id,'/Seller/DeleteReview')"
+                                        class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                   </button>
+                                }       
+                               
+                        </div>
+
+                            <div class="rating mb-3">
+                                @{
+                                    double avgRatingPro = item.Rating;
+                                    int fullStarsPro = (int)avgRatingPro;
+                                    bool halfStarPro = avgRatingPro - fullStarsPro >= 0.5;
+                                    int emptyStarsPro = 5 - fullStarsPro - (halfStarPro ? 1 : 0);
+                                }
+                                @for (int i = 0; i < fullStarsPro; i++)
+                                {
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                }
+                                @if (halfStarPro)
+                                {
+                                    <i class="bi bi-star-half text-warning"></i>
+                                }
+                                @for (int i = 0; i < emptyStarsPro; i++)
+                                {
+                                    <i class="bi bi-star text-warning"></i>
+                                }
+                                <span class="ms-2 text-secondary">(@item.Rating)</span>
+                            </div>
+                            <p class="mb-0">@item.Comment</p>
+                        </div>
+                    </div>
+                }
+            }
+
+
+        </div>
+    </div>
+
+</body>
+</html>

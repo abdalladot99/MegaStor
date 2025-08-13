@@ -1,0 +1,101 @@
+﻿
+<!-- product -->
+@model Product 
+
+<div class="product">
+	<div class="product-img " style=" max-height: 230px;min-height: 230px; height: auto;">
+		<img src="~/img/@Model.ImageUrl"
+			 style="width: 100%; height: 230px; object-fit: contain;"
+			 alt=""> 
+		@if (ViewData["data"] == "TopDiscountProducts")
+		{
+			<div class="product-label">
+				<span class="sale">-@Model.discount%</span>
+				<span class="new">Discount</span>
+			</div>
+		}
+		@if (ViewData["data"] == "TopSellingProducts")
+		{
+
+			<div class="product-label">
+ 				<span class="new">Top Selling</span>
+			</div>
+		}
+		@if (ViewData["data"] == "Newproducts")
+		{
+
+			<div class="product-label">
+				<span class="new">NEW</span>
+			</div>
+		}
+		 
+	</div>
+	<div class="product-body">
+		<p class="product-category">Category</p>
+		<h3 class="product-name"><a href="#">product name goes here</a></h3>
+		@if (Model.DiscountPrice != Model.Price)
+		{
+			<h4 class="product-price">$@Model.DiscountPrice <del class="product-old-price">$@Model.Price</del></h4>
+		}
+		else
+		{
+			<h4 class="product-price">$@Model.Price <del class="product-old-price"></del></h4>
+		}
+		<div class="product-rating">
+			@{
+				double avgRating = Model.AverageRating;
+				int fullStars = (int)avgRating;
+				bool halfStar = avgRating - fullStars >= 0.5;
+				int emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+			}
+			@for (int i = 0; i < fullStars; i++)
+			{
+				<!-- نجمة كاملة -->
+				<i class="fa fa-star"></i>
+			}
+			@if (halfStar)
+			{
+				<!-- نص نجمة -->
+				<i class="fa fa-star-half-o"></i>
+			}
+			@for (int i = 0; i < emptyStars; i++)
+			{
+				<!-- نجمة فاضية -->
+				<i class="fa fa-star-o"></i>
+			}
+		</div>
+		<div class="product-btns">
+
+			<form asp-controller="Wishlists" asp-action="AddWishList" method="post" style="display:inline;">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="id" value="@Model.Id" />
+				<button class="add-to-wishlist" type="submit" style="all: unset; cursor: pointer;">
+					<i class="fa fa-heart-o"></i><span class="tooltipp"> </span>
+				</button>
+			</form>
+
+			<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+
+			<button class="quick-view">
+				<a asp-controller="Product" asp-action="Details" asp-route-id="@Model.Id">
+					<i class="fa fa-eye"></i>
+				</a>
+				<span class="tooltipp">quick view</span>
+			</button>
+
+		</div>
+	</div>
+
+	<div class="add-to-cart">
+		<form asp-action="AddToCart" asp-controller="Cart" method="post">
+
+			<input type="hidden" name="id" value="@Model.Id" />
+
+			<button type="submit" class="add-to-cart-btn"> <i class="fa fa-shopping-cart"></i> add to cart</button>
+
+
+		</form>
+	</div>
+
+</div>
+<!-- /product -->

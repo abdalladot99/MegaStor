@@ -1,0 +1,138 @@
+﻿@model CartViewModel
+@inject IConfiguration _configuration
+
+@{
+    ViewBag.Title = "CAR PRODUCT";
+    //var total = Model.Sum(p => p.pricediscount * p.Quantity);
+    string usd = Currencies.USD;
+    var shipping = _configuration.GetValue<decimal>("StoreSettings:ShippingFee");
+}
+<div class="container">
+<div class="row">
+    <div class="m-3">
+        <h3>Your Car Product</h3>
+    </div>
+
+    <div class="col-12 col-md-8">
+        <div class="card p-3">
+
+            @if (Model.TotalQuantity == 0)
+            {
+                <h4 class="m-4">Not found Product</h4>
+            }
+
+            @foreach (var item in Model.CartItems)
+            {
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center border-bottom py-3 gap-3 ">
+                    <div class="d-flex align-items-center ">
+                        <a asp-controller="Product" asp-action="Details" asp-route-id="@item.CarItemId">
+                            <img src="~/img/@item.ImageItem" alt="@item.NameItem" class="img-fluid rounded" width="80" height="80" style="background:#eee;" />
+                        </a>
+                        <div class="ms-3">
+                            <h6 class="mb-1">@item.NameItem</h6>
+                            <p class="text-muted mb-0 small">SelerName: @item.SelerName</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center ">
+                        <form asp-action="DecreaseQuantity" asp-controller="Cart" method="post" class="me-2">
+                            <input type="hidden" name="id" value="@item.CarItemId" />
+                            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-dash"></i></button>
+                        </form>
+
+                        <span class="px-2">@item.Quantity</span>
+
+                        <form asp-action="IncreaseQuantity" asp-controller="Cart" method="post" class="ms-2">
+                            <input type="hidden" name="id" value="@item.CarItemId" />
+                            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-plus"></i></button>
+                        </form>
+                    </div>
+
+                    <div class="col-4">
+                         @if (item.pricediscount != item.PriceItem)
+                        {
+                            <h4 class="product-price">$@item.pricediscount <del class="product-old-price" style="color:red;">$@item.PriceItem</del></h4>
+                        }
+                        else
+                        {
+                            <h4 class="product-price">$@item.PriceItem <del class="product-old-price"></del></h4>
+                        }
+                    </div>
+
+                    <div >
+                        <button onclick="DeleteNow(@item.CarItemId,'/Cart/DeleteItem')" class="btn btn-link text-danger">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <div class="text-end mt-3">
+                <button onclick="DeleteNow(0,'/Cart/DeleteCart')" class="btn btn-text-danger">Empty the Car!</button>
+            </div>
+        </div>
+
+        <div class="border-top pt-4 mx-4 mb-4">
+            <p><i class="fas fa-truck text-muted fa-lg"></i> Free Delivery within 1-2 weeks</p>
+            <p class="text-muted">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+        </div>
+
+        <a href="/Home/Index" class="btn btn-outline-primary m-4"><i class="bi bi-arrow-left"></i> Continue shopping</a>
+    </div>
+
+    <div class="col-12 col-md-4 mt-4 mt-md-0">
+        <div class="card p-4">
+            <h5>Your order summary</h5>
+            <hr />
+
+            <div class="row">
+                <p class="col-6">Total Products :</p>
+                <p class="text-end col-6">@Model.TotalQuantity</p>
+            </div>
+
+            @foreach (var i in Model.CartItems)
+            {
+                <div class="row">
+                    <p class="col-6">@i.NameItem : </p>
+                    <p class="text-end col-6">@i.Quantity x @i.pricediscount</p>
+                </div>
+            }
+
+            <div class="row">
+                <p class="col-6">Total Price :</p>
+                <p class="text-end col-6">$ @Model.TotalAmount</p>
+            </div>
+
+ 
+            <div class="row">
+                <p class="col-6">Shipping fees:</p>
+                <p class="text-end col-6">@shipping.ToString("C")</p>
+            </div>
+
+            <hr />
+            <div class="row">
+                <p class="col-6">Total:</p>
+                <p class="text-end col-6">@usd @(Model.TotalAmount + shipping)</p>
+            </div>
+
+            <form asp-action="Checkout" method="post">
+                <a class="btn btn-success w-100 shadow-0 mb-2" asp-controller="Order" asp-action="Checkout">
+                    Check Out <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </form>
+
+            <p class="text-muted small mt-2">
+                By clicking on "Complete the order" you agree to the <a href="#">Privacy Policy</a>.
+            </p>
+        </div>
+    </div>
+</div>
+</div>
+@section Scripts {
+    <script src="~/js/Custom.js" asp-append-version="true"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

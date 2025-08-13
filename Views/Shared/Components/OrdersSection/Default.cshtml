@@ -1,0 +1,106 @@
+﻿@using MegaStor.Constants.Enum
+@model List<Order>
+@{
+    ViewData["Title"] = "All Orders";
+}
+
+<div class="pagetitle container-fluid">
+    <h1>All Orders</h1>
+    <hr />
+</div>
+
+@if (Model.Any())
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card-body">
+                    <!-- Scroll Wrapper -->
+                    <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                        <table class="table table-striped">
+                            <thead class="table-dark sticky-top">
+                                <tr class="align-middle">
+                                    <th>Customer Name</th>
+                                    <th class="text-center">Amount</th>
+                                    <th class="text-center">Item Quantity</th>
+                                    <th>Order Date</th>
+                                    <th class="text-center">Order Status</th>
+                                    <th class="text-center">Shipping Status</th>
+                                    <th class="text-center">---</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (order.Customer?.ImgUser != null)
+                                            {
+                                                <img src="~/img/@order.Customer.ImgUser" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-person"></i>
+                                            }
+
+                                            @if (order.Customer != null)
+                                            {
+                                                <span>@order.Customer?.UserName</span>
+                                            }
+                                            else
+                                            {
+                                                <span>N/A</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">$@order.TotalAmount</td>
+                                        <td class="text-center">@order.TotalQuantity</td>
+                                        <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
+                                        <td class="text-center">
+                                            @if (order.OrderStatus == OrderPlacementStatusEnum.Cancelled)
+                                            {
+                                                <span class="badge bg-danger text-light">@order.OrderStatus</span>
+                                            }
+                                            else if (order.OrderStatus == OrderPlacementStatusEnum.Completed)
+                                            {
+                                                <span class="badge bg-success text-light">@order.OrderStatus</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            @if (order.ShippingStatus == OrderShippingStatusEnum.Pending)
+                                            {
+                                                <span class="badge bg-warning text-light">@order.ShippingStatus</span>
+                                            }
+                                            else if (order.ShippingStatus == OrderShippingStatusEnum.Cancelled || order.ShippingStatus == OrderShippingStatusEnum.FailedDelivery)
+                                            {
+                                                <span class="badge bg-danger text-light">@order.ShippingStatus</span>
+                                            }
+                                            else if (order.ShippingStatus == OrderShippingStatusEnum.Delivered)
+                                            {
+                                                <span class="badge bg-success text-light">@order.ShippingStatus</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-primary text-light">@order.ShippingStatus</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            <a asp-action="Details" asp-controller="Order" asp-route-orderId="@order.Id">View Detail</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End table-responsive -->
+                </div>
+                <a href="/ReportsManagement/GenerateOrderReport" class="btn My-btn">Generate Report</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <p>Empty</p>
+    </div>
+}

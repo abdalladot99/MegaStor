@@ -1,0 +1,54 @@
+﻿@model SubCategory
+<div class="container my-5">
+
+
+	<!-- Products Section -->
+
+	<div class="row gy-4">
+
+		<!-- Header Section -->
+		<div class="text-center mb-5">
+			<h1 class="display-4 text-primary"> View Products : </h1>
+			<p class="lead">Discover amazing products tailored just for you!</p>
+			<Span class="lead stars"><a href="/Category/Details/@Model.Category.Id">@Model.Category.Name</a> / <a href="#">@Model.CategoryName</a> </Span>
+
+		</div>
+
+		<!-- Product Info Section -->
+		<div class="row mb-5 align-items-center border-1">
+			<div class="col-md-6 text-center">
+				<img src="~/img/@Model.ImgUrl" alt="@Model.CategoryName" class="img-fluid rounded shadow" style="max-height: 300px; object-fit: contain;">
+			</div>
+			<div class="col-md-6 text-center text-md-start">
+				<h2 class="text-secondary">@Model.CategoryName</h2>
+				<h4>Number of Product : <span class="badge bg-primary">@Model.Products.Count</span></h4>
+			</div>
+		</div>
+		 
+
+			@foreach (var subProduct in  Model.Products)
+			{
+			  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+				<div class="card h-100 shadow-sm border-0">
+					<img src="/img/@subProduct.ImageUrl" class="card-img-top img-fluid" alt="@subProduct.Name" style="height: 200px; object-fit: cover;">
+					<div class="card-body">
+						<h5 class="card-title text-center">@subProduct.Name</h5>
+						<p class="card-text"><strong>Description:</strong> @subProduct.Description</p>
+						<p class="card-text"><strong>Price:</strong> @subProduct.Price.ToString("C")</p>
+						<p class="card-text"><strong>Quantity:</strong> @subProduct.Quantity</p>
+						<p class="card-text"><strong>Category:</strong> @subProduct.Category?.Name</p>
+						<p class="card-text"><strong>Vendor:</strong> @subProduct.Vendor?.UserName</p>
+					</div>
+					<div class="card-footer bg-white text-center">
+						<a href="/Product/Details/@subProduct.Id" class="btn btn-outline-primary w-100">View Details</a>
+					</div>
+				</div>
+			</div>
+  			}
+
+
+ 	</div>
+</div>
+
+
+ 

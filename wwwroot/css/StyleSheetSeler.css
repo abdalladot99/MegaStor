@@ -1,0 +1,141 @@
+﻿ :root {
+    --primary: #4e73df;
+    --primary-light: #e6f0ff;
+    --success: #1cc88a;
+    --warning: #f6c23e;
+    --danger: #e74a3b;
+    --dark: #5a5c69;
+    --light: #f8f9fc;
+    --sidebar-width: 250px;
+    --header-height: 60px;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--light);
+    color: var(--dark);
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: linear-gradient(180deg, var(--primary) 0%, #224abe 100%);
+    color: white;
+    position: fixed;
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.sidebar-brand {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar-menu {
+    padding: 1rem 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+    .menu-item:hover, .menu-item.active {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item.active {
+        border-left: 3px solid white;
+    }
+
+.menu-icon {
+    margin-right: 0.75rem;
+    font-size: 0.9rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* Main Content */
+.main-content {
+    
+    min-height: 100vh;
+}
+
+/* Header */
+.topbar {
+    height: var(--header-height);
+    background: white;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+/* Stats Cards */
+.stat-card {
+    border-left: 0.25rem solid;
+    transition: transform 0.3s;
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-card.primary {
+        border-left-color: var(--primary);
+    }
+
+    .stat-card.success {
+        border-left-color: var(--success);
+    }
+
+    .stat-card.warning {
+        border-left-color: var(--warning);
+    }
+
+/* Product Cards */
+.product-card {
+    transition: all 0.3s;
+}
+
+    .product-card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+.product-img {
+    height: 150px;
+    object-fit: contain;
+    background: #f8f9fa;
+}
+
+/* Review Stars */
+.rating-stars {
+    color: var(--warning);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        margin-left: -250px;
+    }
+
+        .sidebar.active {
+            margin-left: 0;
+        }
+
+    .main-content {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+ 

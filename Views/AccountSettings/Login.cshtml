@@ -1,0 +1,163 @@
+﻿@model LoginAccountViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+ 
+<style>
+    .social-btn {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .social-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+        }
+
+     
+</style>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-body p-4">
+                    <h3 class="text-center mb-4 text-primary">Welcome Back</h3>
+
+                    <form asp-action="Login" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter your email" autocomplete="Email" aria-label="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" autocomplete="current-password" aria-label="Password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="RememberMe" />
+                                <label class="form-check-label" asp-for="RememberMe">Remember me</label>
+                            </div>
+                            <a asp-action="ForgotPassword" asp-controller="AccountSettings" class="text-decoration-none small text-primary">Forgot password?</a>
+                        </div> 
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-success btn-lg">Login</button>
+                        </div>
+   
+
+                        <div class="text-center my-3">
+                            <span class="text-muted">or continue with</span>
+                        </div>
+                         
+                        <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="Google"
+                               class="btn btn-light border social-btn" title="Google">
+                                <i class="bi bi-google text-danger"></i>
+                            </a>
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="GitHub"
+                               class="btn btn-dark text-white social-btn" title="GitHub">
+                                <i class="bi bi-github"></i>
+                            </a>
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="Facebook"
+                               class="btn btn-primary text-white social-btn" title="Facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="Microsoft"
+                               class="btn btn-secondary text-white social-btn" title="Microsoft">
+                                <i class="bi bi-microsoft"></i>
+                            </a> 
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="LinkedIn"
+                               class="btn btn-info text-white social-btn" title="LinkedIn">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                        </div>
+
+                        <div class="text-center">
+                            <span class="text-muted">Don't have an account?</span>
+                            <a asp-action="Register" class="btn btn-link px-1">Create one</a>
+                        </div>
+
+
+                        <hr />
+                        <!-- عنوان توضيحي فوق الأزرار -->
+                        <div class="text-center mb-2">
+                            <small class="text-muted fst-italic">Test accounts - اضغط على زرار لتعبئة البيانات تلقائياً</small>
+                        </div> 
+                        <!-- أزرار الرولز -->
+                        <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
+                            <button type="button" class="btn btn-primary btn-sm fw-semibold px-4"
+                                    onclick="fillAndSubmit('mainadmin_user@example.com', 'Password@123')">
+                                MainAdmin
+                                <span class="badge bg-light text-primary ms-2">Test</span>
+                            </button>
+
+                            <button type="button" class="btn btn-secondary btn-sm fw-semibold px-4"
+                                    onclick="fillAndSubmit('admin_user@example.com', 'Password@123')">
+                                Admin
+                                <span class="badge bg-light text-secondary ms-2">Test</span>
+                            </button>
+
+                            <button type="button" class="btn btn-success btn-sm fw-semibold px-4"
+                                    onclick="fillAndSubmit('customer_user@example.com','Password@123')">
+                                Customer
+                                <span class="badge bg-light text-success ms-2">Test</span>
+                            </button>
+
+                            <button type="button" class="btn btn-warning btn-sm fw-semibold px-4 text-dark"
+                                    onclick="fillAndSubmit('seller_user@example.com', 'Password@123')">
+                                Seller
+                                <span class="badge bg-light text-warning ms-2">Test</span>
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Initialize Bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    </script>
+    
+     <script>
+        // الدالة تعبي القيم في الحقول وتعمل submit للفورم
+        function fillAndSubmit(email, password) {
+            document.getElementById('Email').value = email;
+            document.getElementById('Password').value = password;
+
+            // تعمل submit للفورم
+            document.getElementById('loginForm').submit();
+        }
+
+        // initialize bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    </script>
+
+
+}

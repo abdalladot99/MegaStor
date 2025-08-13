@@ -1,0 +1,67 @@
+﻿@model List<WishlistViewModel>
+ 
+@{
+
+	ViewBag.Title = "WISHLIST PRODUCT";
+
+  
+}
+ 
+<!-- Cart -->
+<div class="dropdown">
+	<a class="dropdown-toggle"  data-toggle="dropdown" aria-expanded="true">
+		<i class="fa fa-heart-o"></i>
+		<span>Your Wishlist</span>
+		<div class="qty">@Model.Count</></div>
+
+ 	</a>
+	<div class="cart-dropdown" style="width:180px;">
+		<div class="cart-list">
+
+			@foreach (var item in Model)
+			{
+
+				<div class="product-widget">
+					<div class="product-img">
+						<img src="~/img/@item.ImageUrl" alt="">
+					</div>
+					<div class="product-body">
+						<h3 class="product-name"><a href="#">@item.Name</a></h3>
+						@if (item.Price!=item.pricediscount)
+						{
+							<h4 class="product-name">
+								<a href="#">
+									@item.pricediscount	<del class="product-old-price" style="color:red;">$@item.Price</del>
+								</a>
+							</h4>
+						}
+						else
+						{
+							<h4 class="product-name"><a href="#">@item.pricediscount</a></h4> 
+						}
+  					</div>
+ 					<button onclick="DeleteNow(@item.Id,'/WishLists/Delete')" class="delete"><i class="fa fa-close"></i></button>
+
+
+				</div>
+			}
+
+		</div>
+
+
+
+		<div class="cart-summary">
+			<small>
+				@Model.Count
+				Item(s) selected
+			</small>
+		</div>
+
+		<div class="row p-3" style="background-color:black ;">
+			<a href="/WishLists/Index" style="color:whitesmoke"> VIEW WISHLIST PRODUCT <i class="fa fa-arrow-circle-right"></i></a>
+		</div>
+
+	</div>
+</div>
+
+

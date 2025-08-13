@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Category>
+<div class="container">
+    <div class="row m-3">
+        <div class="col text-end">
+            <a href="#" class="btn btn-dark"> Number : @ViewBag.counter</a>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card">
+                    <a href="/Category/Details/@item.Id">
+                         <img src="~/img/@item.ImgUrl"  class="card-img-top img-fluid" alt="@item.Name" style="height: 300px; object-fit: cover;" />
+					</a>
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">@item.Name</h5>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+ 
+ 
+<div class="container">
+	<div class="row m-3">
+        <div class="col">
+		    <a asp-action="Create" class="btn btn-primary ">Create New</a>
+		</div>
+        <div class="col text-end">
+		    <a href="#" class="btn btn-dark"> Number : @ViewBag.counter</a>
+		</div>
+	</div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card">
+
+                     <img src="~/img/@item.ImgUrl" class="card-img-top img-fluid" alt="@item.Name" style="height: 200px; object-fit: cover;" />
+
+                     <div class="card-body">
+                        <h5 class="card-title text-center mb-3">@item.Name</h5>
+                        <div class="d-flex justify-content-around">
+                            <a asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-controller="Category" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                            <button onclick="showAlert(@item.Id,'/Category/Delete')" class="btn btn-danger btn-sm">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Custom.js" asp-append-version="true"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+ 
+
+
+

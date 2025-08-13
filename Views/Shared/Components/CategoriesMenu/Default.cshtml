@@ -1,0 +1,58 @@
+﻿@model List<Category>
+<!-- NAVIGATION -->
+<nav id="navigation" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+	<!-- container -->
+	<div class="container">
+		<!-- responsive-nav -->
+		<div id="responsive-nav">
+			<!-- NAV -->
+			<div class="section-nav">
+				<ul class="main-nav nav navbar-nav">
+					<li >
+						<a asp-action="Index" asp-controller="Home">
+							<i class="bi bi-house-door" style="font-size:20px;" ></i> 
+						</a>
+					</li>
+					@foreach (var i in Model)
+					{
+
+						<li  ><a href="/Category/Details/@i.Id">
+								<img src="~/img/@i.ImgUrl" style="width: 20px; height: 20px; object-fit: cover; border-radius: 50%;" alt="" />
+								@i.Name
+							</a>
+						</li>
+
+					}
+				</ul>
+			</div>
+			 
+			<!-- /NAV -->
+		</div>
+		<!-- /responsive-nav -->
+	</div>
+	<!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const navLinks = document.querySelectorAll(".main-nav li");
+ 		navLinks.forEach(link => {
+
+			link.addEventListener("click", function () {
+ 
+				navLinks.forEach(nav => nav.removeAttribute("class"));
+
+ 				this.setAttribute("class", "active");
+				
+			});
+		});
+	});
+
+	@section Scripts {
+		@{
+			await Html.RenderPartialAsync("_ValidationScriptsPartial");
+		}
+	}
+
+</script>

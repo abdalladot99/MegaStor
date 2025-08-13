@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Payment Result";
+    bool success = ViewBag.Success ?? false;
+}
+
+<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:80vh; font-family:Arial;">
+    <div style="max-width:500px; padding:30px; border-radius:15px; text-align:center; 
+                box-shadow:0 0 15px rgba(0,0,0,0.1); background-color:white;">
+        
+        @if (success)
+        {
+            <div style="font-size:60px; color:green;">&#10004;</div>  
+            <h2 style="color:green;">@ViewBag.Message</h2>
+        }
+        else
+        {
+            <div style="font-size:60px; color:red;">&#10008;</div>  
+            <h2 style="color:red;">@ViewBag.Message</h2>
+        }
+
+        <a href="/Home/Index" style="display:inline-block; margin-top:20px; padding:10px 20px; background-color:#007bff;
+                           color:white; border-radius:5px; text-decoration:none;">
+            Back to Home
+        </a>
+    </div>
+</div>

@@ -1,0 +1,291 @@
+﻿@model CheckOutViewModel
+@{
+	ViewData["Title"] = "Checkout";
+}
+ 
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">Checkout</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="/Home/Index">Home</a></li>
+					<li class="active">Checkout</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->	
+		<form asp-action="PlaceOrder" method="post">
+
+			<div class="row">
+
+				<div class="col-md-7">
+
+					<!-- Billing Details -->
+					<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Billing address</h3>
+							</div>
+							<div class="form-group">
+							<input class="input" type="text" asp-for="BillingAddress.FirstName" id="Billing-FirstName" placeholder="First Name">
+								<span asp-validation-for="BillingAddress.FirstName"  class="text-danger"></span>
+							</div>
+							<div class="form-group">
+							<input class="input" type="text" asp-for="BillingAddress.LastName" id="Billing-LastName" placeholder="Last Name">
+								<span asp-validation-for="BillingAddress.LastName" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+							<input class="input" type="email" asp-for="BillingAddress.EmailAddress" id="Billing-EmailAddress" placeholder="Email">
+								<span asp-validation-for="BillingAddress.EmailAddress" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+							<input class="input" type="text" asp-for="BillingAddress.Address" id="Billing-Address" placeholder="Address">
+								<span asp-validation-for="BillingAddress.Address" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+							<input class="input" type="text" asp-for="BillingAddress.City" id="Billing-City" placeholder="City">
+								<span asp-validation-for="BillingAddress.City" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+							<input class="input" type="text" asp-for="BillingAddress.Country" id="Billing-Country" placeholder="Country">
+								<span asp-validation-for="BillingAddress.Country" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+							<input class="input" type="text" asp-for="BillingAddress.PostalOrZipCode" id="Billing-PostalOrZipCode" placeholder="ZIP Code">
+								<span asp-validation-for="BillingAddress.PostalOrZipCode" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+							<input class="input" type="tel" asp-for="BillingAddress.PhoneNumber" id="Billing-PhoneNumber" placeholder="Telephone">
+								<span asp-validation-for="BillingAddress.PhoneNumber" class="text-danger"></span>
+							</div>
+ 
+							 
+ 					</div>
+					<!-- /Billing Details -->
+
+					<!-- Shiping Details -->
+					<div class="shiping-details">
+						<div class="section-title">
+							<h3 class="title">Shiping address</h3>
+						</div>
+						<div class="input-checkbox">
+
+							<input type="checkbox" id="shiping-address">
+							<label for="shiping-address">
+								<span></span>
+								Click here to complete your shipping address
+							</label>
+ 
+							<div class="caption">
+		 
+								<div class="form-group">
+									<input class="input" type="text" asp-for="ShippingAddress.FirstName" id="Shiping-FirstName" placeholder="First Name">
+									<span asp-validation-for="BillingAddress.FirstName" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" asp-for="ShippingAddress.LastName" id="Shiping-LastName" placeholder="Last Name">
+									<span asp-validation-for="BillingAddress.LastName" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<input class="input" type="email" asp-for="ShippingAddress.EmailAddress" id="Shiping-EmailAddress" placeholder="Email">
+									<span asp-validation-for="BillingAddress.EmailAddress" class="text-danger"></span>
+
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" asp-for="ShippingAddress.Address" id="Shiping-Address" placeholder="Address">
+									<span asp-validation-for="BillingAddress.Address" class="text-danger"></span>
+
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" asp-for="ShippingAddress.City" id="Shiping-City" placeholder="City">
+									<span asp-validation-for="BillingAddress.City" class="text-danger"></span>
+
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" asp-for="ShippingAddress.Country" id="Shiping-Country" placeholder="Country">
+									<span asp-validation-for="BillingAddress.Country" class="text-danger"></span>
+
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" asp-for="ShippingAddress.PostalOrZipCode" id="Shiping-PostalOrZipCode" placeholder="ZIP Code">
+									<span asp-validation-for="BillingAddress.PostalOrZipCode" class="text-danger"></span>
+
+								</div>
+								<div class="form-group">
+									<input class="input" type="tel" asp-for="ShippingAddress.PhoneNumber" id="Shiping-PhoneNumber" placeholder="Telephone">
+									<span asp-validation-for="BillingAddress.PhoneNumber" class="text-danger"></span>
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Shiping Details -->
+  
+				 
+				</div>
+
+				<!-- Order Details -->
+				<div class="col-md-5 order-details">
+					<div class="section-title text-center">
+						<h3 class="title">Your Order</h3>
+					</div>
+					<div class="order-summary">
+						<div class="order-col">
+							<div><strong>PRODUCT</strong></div>
+							<div><strong>TOTAL</strong></div>
+						</div>
+						
+						<div class="order-products">
+							@foreach (var i in Model.CartItems)
+							{
+								 <div class="order-col">
+									<div> @i.Quantity x @i.NameItem </div>
+									<div>$@i.TotalPricForItems</div>
+								</div>
+													 
+								 
+							 
+							}
+
+							@for (int i = 0; i < Model.CartItems.Count; i++)
+							{
+								<input type="hidden" asp-for="CartItems[@i].CarItemId" />
+								<input type="hidden" asp-for="CartItems[@i].NameItem" />
+								<input type="hidden" asp-for="CartItems[@i].Quantity" />
+								<input type="hidden" asp-for="CartItems[@i].TotalPricForItems" />
+								<input type="hidden" asp-for="CartItems[@i].DescriptionProductItem" />
+								<input type="hidden" asp-for="CartItems[@i].PriceItem" />
+								<input type="hidden" asp-for="CartItems[@i].pricediscount" />
+								<input type="hidden" asp-for="CartItems[@i].ImageItem" />
+								<input type="hidden" asp-for="CartItems[@i].SelerName" />
+							}
+
+						</div>
+						<div class="order-col">
+							<div>Shiping</div>
+							<div><strong>FREE</strong></div>
+						</div>
+						<div class="order-col">
+							<div><strong>TOTAL</strong></div>
+							<div><strong class="order-total">$@Model.TotalAmount</strong></div>
+
+							<input type="hidden" asp-for="@Model.TotalAmount" />
+
+						</div>
+					</div>
+					 
+					 
+ 						@* Payment Method *@
+						<h5 class="card-title mb-3">Select Payment Method</h5>
+						<div class="row mb-3">
+							<div class="col  mb-3 text-start">
+								<!-- Default checked radio -->
+								<div class="form-check h-100 border rounded-3"> 
+									<div class="p-3">
+									    <input class="form-check-input" asp-for="SelectedPaymentMethod" type="radio" id="creditCard" value="CreditOrDebitCard" />
+										<label class="form-check-label" for="creditOrDebitCard">
+											Credit_Debit Card <br />
+											<small class="text-muted">CDC </small>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col mb-3 text-end">
+
+								<div class="form-check h-100 border rounded-3">
+									<div class="p-3">
+										<input class="form-check-input" asp-for="SelectedPaymentMethod" type="radio" id="cod-option" value="CashOnDelivery" />
+										<label class="form-check-label" for="cashOnDelivery">
+											Cash On Delivery <br />
+											<small class="text-muted">COD </small>
+										</label>
+									</div>
+								</div>
+							</div>
+							<span asp-validation-for="SelectedPaymentMethod" class="text-danger"></span>
+						</div>
+
+ 
+ 					<button class="primary-btn order-submit w-100" type="submit">Continue</button>
+
+				</div>
+				<!-- /Order Details -->
+			</div>
+		<!-- /row -->
+		</form>
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="newsletter">
+					<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+					<form>
+						<input class="input" type="email" placeholder="Enter Your Email">
+						<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+					</form>
+					<ul class="newsletter-follow">
+						<li>
+							<a href="#"><i class="fa fa-facebook"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-instagram"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-pinterest"></i></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /NEWSLETTER -->
+@* Handle Same As Above checkbox *@
+<script>
+	$(document).ready(function () {
+		$('#billing-checkbox').on('change', function () {
+			if ($(this).is(':checked')) {
+
+				$('#Shiping-FirstName').val($('#billing-FirstName').val());
+				$('#Shiping-LastName').val($('#billing-LastName').val());
+				$('#Shiping-EmailAddress').val($('#Billing-EmailAddress').val());
+				$('#Shiping-Address').val($('#Billing-Address').val());
+				$('#Shiping-City').val($('#Billing-City').val());
+				$('#Shiping-Country').val($('#Billing-Country').val());
+				$('#Shiping-PostalOrZipCode').val($('#Billing-PostalOrZipCode').val());
+				$('#Shiping-PhoneNumber').val($('#Billing-PhoneNumber').val());
+				 
+				// disable billing fields
+				// $('#billing-fullName, #billing-country, #billing-phone, #billing-email, #billing-address, #billing-city, #billing-state, #billing-zip').prop('disabled', true);
+			} else {
+
+				$('#Shiping-FirstName,#Shiping-LastName, #Shiping-EmailAddress, #Shiping-Address,#Shiping-City,#Shiping-Country, #Shiping-PostalOrZipCode,#Shiping-PhoneNumber').val('').prop('disabled', false);
+			}
+		});
+	});
+</script>

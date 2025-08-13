@@ -1,0 +1,194 @@
+﻿@model RegisterAccountViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    .social-btn {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .social-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+        }
+
+    .upload-preview img {
+        border-radius: 50%;
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+ 
+<div class="container mt-5">
+    <div class="row justify-content-center">
+
+        <div id="addCircuitimg">
+        </div>
+
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-body p-4">
+                    <h3 class="text-center mb-4 text-primary">Create Your Account</h3>
+
+                    <form asp-action="Register" novalidate enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <div class="mb-3">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input asp-for="FirstName" class="form-control" placeholder="FirstName" autocomplete="FirstName" aria-label="FirstName" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input asp-for="LastName" class="form-control" placeholder="Name" autocomplete="Name" aria-label="Name" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" placeholder="Email Address" autocomplete="email" aria-label="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label"></label>
+                            <input  asp-for="Address" class="form-control" placeholder="Address" autocomplete="Address" aria-label="Address" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-control" placeholder="Password" autocomplete="new-password" aria-label="Password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PasswordConfirmed" class="form-label"></label>
+                            <input asp-for="PasswordConfirmed" class="form-control" placeholder="Confirm Password" autocomplete="new-password" aria-label="Confirm Password" />
+                            <span asp-validation-for="PasswordConfirmed" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PhoneNumber" class="form-label"></label>
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="Enter Phone Number : EX. 201000000000" autocomplete="Phone Number" aria-label="Phone Number" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="btn btn-outline-primary w-100" id="yes">Add Profile Image</p>
+                            <div id="myElement"></div>
+                            <input type="hidden" asp-for="ImgUrl" id="no" />
+                            <span asp-validation-for="ImgUrl" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-success btn-lg">Register</button>
+                        </div>
+
+                        <div class="text-center my-3 text-muted">
+                            <small>or continue with</small>
+                        </div>
+
+                         <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="Google"
+                               class="btn btn-light border social-btn" title="Google">
+                                <i class="bi bi-google text-danger"></i>
+                            </a>
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="GitHub"
+                               class="btn btn-dark text-white social-btn" title="GitHub">
+                                <i class="bi bi-github"></i>
+                            </a>
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="Facebook"
+                               class="btn btn-primary text-white social-btn" title="Facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="Microsoft"
+                               class="btn btn-secondary text-white social-btn" title="Microsoft">
+                                <i class="bi bi-microsoft"></i>
+                            </a> 
+                            <a asp-action="ExternalLogin" asp-controller="Account" asp-route-provider="LinkedIn"
+                               class="btn btn-info text-white social-btn" title="LinkedIn">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                        </div>
+
+
+                        <div class="text-center">
+                            <span class="text-muted">Already have an account?</span>
+                            <a asp-action="Login" asp-controller="AccountSettings" class="btn btn-link px-1">Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Initialize Bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    </script>
+
+    <script>
+        var liadFile = function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var myImg = document.getElementById('myImg');
+                myImg.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            let targetElement = document.getElementById(`myElement`);
+            let yes = document.getElementById(`yes`);
+            let no = document.getElementById(`no`);
+
+            let addimg = document.getElementById(`addCircuitimg`);
+
+            yes.addEventListener('click', function () {
+
+                let newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.name = 'ClientFile';
+                newInput.setAttribute('onchange', 'liadFile(event)');
+
+                addimg.setAttribute('class', 'col-12 col-md-5 mt-3');
+
+                let Imgecircuit = document.createElement('img');
+                Imgecircuit.setAttribute('id', 'myImg');
+                Imgecircuit.setAttribute('class', 'img-fluid text-end');
+                Imgecircuit.setAttribute('width', '500');
+                Imgecircuit.setAttribute('height', '400');
+                Imgecircuit.setAttribute('style', ' border-radius: 50%;');
+
+
+                targetElement.appendChild(newInput);
+                addimg.appendChild(Imgecircuit);
+
+                no.remove();
+
+            });
+        });
+
+    </script>
+}
+}

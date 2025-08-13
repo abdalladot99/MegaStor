@@ -1,0 +1,210 @@
+﻿@using MegaStor.Constants.Enum
+@model List<Order>
+@{
+    ViewData["Title"] = "All Orders";
+    
+    var last7Days = Enumerable.Range(0, 7)
+       .Select(i => DateTime.Today.AddDays(-i))
+       .OrderBy(d => d)
+       .ToList();
+
+    var dateLabels = last7Days
+        .Select(d => d.ToString("dd-MM"))
+        .ToList();
+
+    var orderCountsPerDay = last7Days
+        .Select(date => Model.Count(o => o.OrderDate.Date == date.Date))
+        .ToList();
+
+    var completed = Model.Count(o => o.OrderStatus == MegaStor.Constants.Enum.OrderPlacementStatusEnum.Completed);
+    var cancelled = Model.Count(o => o.OrderStatus == MegaStor.Constants.Enum.OrderPlacementStatusEnum.Cancelled);
+    var pending = Model.Count(o => o.OrderStatus == MegaStor.Constants.Enum.OrderPlacementStatusEnum.Pending);
+}
+ 
+<div class="container"> 
+<div class="pagetitle container-fluid">
+    <h1>All Orders</h1>
+    <hr />
+</div>
+
+@if (Model.Any())
+{
+    <div class="container-fluid">
+         <div class="row">
+				<div class="container my-4 col">
+					<h5>Orders Statistics by Status</h5>
+					<canvas id="ordersBarChart" width="400" height="200"></canvas>
+				</div>
+
+				<div class="container my-5 col">
+					<h5>Order Growth Over Time</h5>
+					<canvas id="ordersLineChart" width="400" height="200"></canvas>
+				</div>
+         </div>
+            
+
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr class="align-middle">
+
+                                        <th>Customer Name</th>
+                                        <th class="text-center">Amount</th>
+                                        <th class="text-center">Item Quantity</th>
+                                        <th>Order Date</th>
+                                        <th class="text-center">Order Status</th>
+                                        <th class="text-center">Shipping Status</th>
+                                        <th class="text-center">---</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (order.Customer?.ImgUser != null)
+                                                {
+                                                    <img src="~/img/@order.Customer.ImgUser" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-person"></i>
+                                                }
+
+                                                @if (order.Customer != null)
+                                                {
+                                                    <span>@order.Customer?.UserName</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>N/A</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">$@order.TotalAmount</td>
+                                            <td class="text-center">@order.TotalQuantity</td>
+                                            <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
+                                            <td class="text-center">
+                                                @if (order.OrderStatus == OrderPlacementStatusEnum.Cancelled)
+                                                {
+                                                    <span class="badge bg-danger text-light">@order.OrderStatus</span>
+                                                }
+                                                else if (order.OrderStatus == OrderPlacementStatusEnum.Completed)
+                                                {
+                                                    <span class="badge bg-success text-light">@order.OrderStatus</span>
+                                                }
+
+                                            </td>
+                                            <td class="text-center">
+                                                @if (order.ShippingStatus == OrderShippingStatusEnum.Pending)
+                                                {
+                                                    <span class="badge bg-warning text-light">@order.ShippingStatus</span>
+                                                }
+                                                else if (order.ShippingStatus == OrderShippingStatusEnum.Cancelled || order.ShippingStatus == OrderShippingStatusEnum.FailedDelivery)
+                                                {
+                                                    <span class="badge bg-danger text-light">@order.ShippingStatus</span>
+                                                }
+                                                else if (order.ShippingStatus == OrderShippingStatusEnum.Delivered)
+                                                {
+                                                    <span class="badge bg-success text-light">@order.ShippingStatus</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-primary text-light">@order.ShippingStatus</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <a asp-action="Details" asp-controller="Order" asp-route-orderId="@order.Id">View Detail</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End table-responsive -->
+                    </div>
+                </div>
+                <a href="/ReportsManagement/GenerateOrderReport" class="btn My-btn">Generate Report</a>
+
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <p>Empty</p>
+    </div>
+}
+</div>
+
+@section Scripts
+{
+    <script>
+        // رسم Bar Chart حسب الحالة
+        const ctxBar = document.getElementById('ordersBarChart').getContext('2d');
+        const ordersBarChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Completed', 'Cancelled', 'Pending'],
+                datasets: [{
+                    label: 'Number of Orders',
+                    data: [@completed, @cancelled, @pending],
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.6)',
+                        'rgba(220, 53, 69, 0.6)',
+                        'rgba(255, 193, 7, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(255, 193, 7, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
+
+        // رسم Line Chart لتزايد الطلبات خلال آخر 7 أيام
+        const ctxLine = document.getElementById('ordersLineChart').getContext('2d');
+        const ordersLineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(dateLabels)),
+                datasets: [{
+                    label: 'Orders per Day',
+                    data: @Html.Raw(Json.Serialize(orderCountsPerDay)),
+                    fill: false,
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                    tension: 0.3,
+                    pointBackgroundColor: 'rgba(0, 123, 255, 1)',
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
+    </script>
+
+}

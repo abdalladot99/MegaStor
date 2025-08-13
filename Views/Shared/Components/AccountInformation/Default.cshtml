@@ -1,0 +1,225 @@
+﻿@model AccountViewModel
+
+<div class="row">
+
+	<div class="profile-card card border-0 shadow-sm mb-4 col-lg-3 me-3">
+		<div class="card-body text-center p-4">
+
+			<div class="profile-image-container mb-3">
+				<img id="myImg" src="~/img/@Model.ProfileImageUrl" class="profile-image" alt="Profile Picture" id="profileImagePreview">
+			</div>
+			<h3 class="profile-name mb-3">@Model.UserName</h3>
+			<span class="profile-role badge bg-primary">@Model.Role</span>
+			  	
+ 		</div>
+	</div>
+
+
+	<!-- Account Information -->
+	<div class="account-info-card card border-0 shadow-sm mb-4 col-lg">
+
+		<div class="card-header bg-white border-0 py-3">
+			<h5 class="card-title mb-0">Account Information</h5>
+		</div>
+		<div class="card-body">
+			<div class="info-item">
+				<div class="info-label">Full Name</div>
+				<div class="info-value">@Model.FullName</div>
+			</div>
+			<div class="info-item">
+				<div class="info-label">Email</div>
+				<div class="info-value">@Model.Email</div>
+			</div>
+			<div class="info-item">
+				<div class="info-label">Phone Number</div>
+				<div class="info-value">@(Model.PhoneNumber ?? "Not provided")</div>
+			</div>
+			<div class="info-item">
+				<div class="info-label">Account Created</div>
+				<div class="info-value">@Model.DateCreated</div>
+			</div>
+			<div class="info-item">
+				<div class="info-label">Last Updated</div>
+				<div class="info-value">@Model.LastUpdated</div>
+			</div>
+
+		</div>
+	</div>
+
+
+</div>
+
+<style>
+    .account-page {
+        padding: 2rem 0 4rem;
+        background-color: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        padding-bottom: 1.5rem;
+    }
+
+    .page-title {
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+        color: #7f8c8d;
+        font-size: 1.1rem;
+    }
+
+    .profile-card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .profile-image-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .profile-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-change-image {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #4a6bff;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s;
+    }
+
+        .btn-change-image:hover {
+            background: #3a56d4;
+            transform: scale(1.1);
+        }
+
+    .profile-name {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-top: 1rem;
+    }
+
+    .profile-role {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+        font-weight: 500;
+    }
+
+    .profile-stats {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin-top: 1.5rem;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #4a6bff;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: #7f8c8d;
+    }
+
+    .quick-actions-card {
+        border-radius: 12px;
+    }
+
+    .btn-action {
+        border-radius: 8px;
+        padding: 0.6rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+        .btn-action i {
+            font-size: 1.1rem;
+        }
+
+    .account-info-card, .password-card {
+        border-radius: 12px;
+    }
+
+    .info-item {
+        display: flex;
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+    .info-label {
+        font-weight: 600;
+        color: #2c3e50;
+        width: 180px;
+    }
+
+    .info-value {
+        color: #34495e;
+    }
+
+    .password-strength .progress-bar {
+        transition: width 0.3s;
+    }
+
+    .toggle-password {
+        border-radius: 0 6px 6px 0 !important;
+    }
+
+    .image-preview-container {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 4px solid #f1f2f6;
+    }
+
+    @@media (max-width: 768px) {
+        .info-item {
+            flex-direction: column;
+        }
+
+        .info-label {
+            width: 100%;
+            margin-bottom: 0.25rem;
+        }
+    }
+</style>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
+

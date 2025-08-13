@@ -1,0 +1,39 @@
+﻿ @model Category
+
+<div class="container my-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-primary"> View SubCategory  : </h1>
+        <p class="lead">Discover amazing products tailored just for you!</p>
+    </div>
+
+    <!-- Product Info Section -->
+    <div class="row mb-5 align-items-center border-1">
+        <div class="col-md-6 text-center">
+            <img src="~/img/@Model.ImgUrl" alt="@Model.Name" class="img-fluid rounded shadow" style="max-height: 300px; object-fit: contain;">
+        </div>
+        <div class="col-md-6 text-center text-md-start">
+            <h2 class="text-secondary">@Model.Name</h2>
+            <h4>Number of SubCategory: <span class="badge bg-primary">@Model.SubCategories.Count</span></h4>
+         </div>
+    </div>
+
+    <!-- Products Section -->
+
+    <div class="row gy-4">
+        @foreach (var subCategory in Model.SubCategories)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <img src="/img/@subCategory.ImgUrl" class="card-img-top img-fluid" alt="@subCategory.CategoryName" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">@subCategory.CategoryName</h5>
+                      </div>
+                    <div class="card-footer bg-white text-center">
+                        <a href="/SubCategory/Details/@subCategory.SubCategoryId"  class="btn btn-primary w-100">View Product</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

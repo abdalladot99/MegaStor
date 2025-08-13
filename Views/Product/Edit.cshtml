@@ -1,0 +1,133 @@
+﻿@model EditForProductViewModel
+<div class="container">
+<h3>Edit Product</h3>
+<hr />
+<div class="row">
+    <div class="col-12 col-md-5">
+        @if (Model.ImageUrl == null)
+        {
+            <img id="myImg" class="img-fluid text-end" width="500" height="400" />
+        }
+        else
+        {
+            <img id="myImg" src="/img/@Model.ImageUrl" class="img-fluid text-end" width="500" height="400" />
+        }
+    </div>
+    <div class="col-12 col-md-7">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+             <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col">
+                    <p>DiscountPrice</p> 
+                    <input class ="form-control" asp-for="DiscountPrice" />
+                </div>
+                <div class="col"  >
+                    <div class="row">
+						<p>discount</p>
+                        <input class="form-control w-75" asp-for="discount" /> 
+                        &#37;
+                    </div>
+                   
+                </div>
+                <span asp-validation-for="discount" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="mt-4 col">
+                    <Span>Category : </Span> 
+                     <select asp-for="CategoryId" class="input-select" asp-items="@ViewBag.categores">
+                        <option value="0">All Categories</option>
+                    </select> 
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="mt-4 col">
+
+                    <span>Sub Category : </span>
+                    <select class="input-select" asp-for="SubCategoryId" asp-items="@ViewBag.SubCategores">
+                        <option value="0">All Sub Categories</option>
+                    </select>
+                    <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+             
+                <div class="form-group row mt-3 ">
+                    <P class="btn btn-primary m-2 col" id="yes">change image .</P>
+                </div>
+                 
+				<div id="myElement">
+					<input type="hidden" id="no" asp-for="ImageUrl" />
+				</div>
+                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group pt-3">
+                <input type="submit" value="Save" class="btn btn-primary" /> 
+            </div>
+        </form>
+    </div>
+   
+</div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        var liadFile = function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var myImg = document.getElementById('myImg');
+                myImg.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            let targetElement = document.getElementById(`myElement`);
+            let yes = document.getElementById(`yes`);
+            let no = document.getElementById(`no`);
+
+            yes.addEventListener('click', function () {
+
+                let newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.name = 'ClientFile'; 
+                
+                newInput.setAttribute('onchange', 'liadFile(event)');
+
+                targetElement.appendChild(newInput); 
+                no.remove();
+
+            }); 
+        });
+        
+
+    </script>
+}
+
+

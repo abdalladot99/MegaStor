@@ -1,0 +1,135 @@
+﻿@model List<OrderViewModel>
+@using MegaStor.Constants.Enum
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> UserManager;
+@{
+    ViewData["Title"] = "My Orders";
+    var user = UserManager.GetUserAsync(User).Result;
+}
+<div class="account-page">
+    <div class="container">
+        <!-- Page Header -->
+        <div class=" text-center mb-1">
+            <h1 class="page-title">@ViewBag.Action</h1>
+            <p class="page-subtitle">Manage your profile and account settings</p>
+        </div>
+
+        @await Component.InvokeAsync("AccountInformation")
+
+
+        <div class="row">
+
+            @await Html.PartialAsync("_QuickActionsInProfile")
+
+            <div class="password-card card border-0 shadow-sm mb-4 col-lg">
+        
+    
+                <div class="password-card card border-0 shadow-sm mb-4 col-lg">
+                    <div class="modal-header">
+                        <h5 class="card-title mb-0">Order history</h5>
+                        <a asp-controller="AccountServices" asp-action="MyAccount" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
+                    </div>
+
+                    <div class="card-body" style="max-height: 490px; overflow-y: auto;">
+                        @if (!Model.Any())
+                        {
+                            <div class="row">
+                                <p>No Record</p>
+                            </div>
+                        }
+                        @foreach (var orders in Model)
+                        {
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="float-end">
+                                                <span>Shipping: </span>
+                                                @if (orders.ShippingStatus == OrderShippingStatusEnum.Pending)
+                                                {
+                                                    <span class="badge bg-warning">@orders.ShippingStatus</span>
+                                                }
+                                                else if (orders.ShippingStatus == OrderShippingStatusEnum.Shipped)
+                                                {
+                                                    <span class="badge bg-primary">@orders.ShippingStatus</span>
+                                                }
+                                                else if (orders.ShippingStatus == OrderShippingStatusEnum.Delivered)
+                                                {
+                                                    <span class="badge bg-success">@orders.ShippingStatus</span>
+                                                }
+                                            </div>
+                                            <span><strong>Order Status</strong></span>
+                                            @if (orders.OrderStatus == OrderPlacementStatusEnum.Completed)
+                                            {
+                                                <span class="badge bg-success">@orders.OrderStatus</span>
+                                                <br>
+                                            }
+                                            else if (orders.OrderStatus == OrderPlacementStatusEnum.Cancelled)
+                                            {
+                                                <span class="badge bg-danger">@orders.OrderStatus</span>
+                                                <br>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">@orders.OrderStatus</span>
+                                                <br>
+                                            }
+
+                                            Quantity: @orders.TotalQuantity, cost: @orders.TotalAmount <br>
+                                            <a class="btn btn-info btn-sm text-white" asp-action="MyOrderDetails" asp-controller="Order" asp-route-orderId="@orders.OrderId">
+                                                <i class="fa fa-usd">Details</i>
+                                            </a>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            Order made on: @orders.OrderDate
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        }
+                    </div>
+                </div>
+
+             </div>
+        </div>
+    </div>
+</div>
+
+
+ 
+<style>
+    .panel-order .row {
+        border-bottom: 1px solid #ccc;
+    }
+
+        .panel-order .row .col-md-11 {
+            border-left: 1px solid #ccc;
+        }
+
+        .panel-order .row .row .col-md-12 {
+            padding-top: 7px;
+            padding-bottom: 7px;
+        }
+
+            .panel-order .row .row .col-md-12:last-child {
+                font-size: 11px;
+                color: #555;
+                background: #efefef;
+            }
+
+    .panel-order .btn-group {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .panel-order .panel-body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .panel-order .panel-deading {
+        margin-bottom: 0;
+    }
+</style>
