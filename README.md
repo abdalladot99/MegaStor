@@ -23,6 +23,19 @@ The system supports **vendor management, secure user authentication, electronic 
 - 🔑 **Password recovery** via email-based reset link.  
 - 🎨 **Modern, responsive UI** built with HTML, CSS, JavaScript, and Bootstrap.  
 - 📊 **Efficient data handling** using LINQ, Entity Framework, and SQL Server.  
-- 💻 Personally handled **both frontend and backend development**.
- 
- 
+
+---
+
+## 🛠️ Tools & Technologies
+
+- 🟣 **.NET 8 & ASP.NET MVC** – Core framework for building the web application.
+- 🟢 **Entity Framework Core** – ORM for database management and data handling.
+- 🗄️ **SQL Server** – Relational database for storing all application data.
+- 🔐 **ASP.NET Identity** – Secure user authentication and Role-Based Access Control (RBAC).
+- 💳 **Payment Gateway Integration** – For secure online payment processing.
+- 📊 **LINQ** – Efficient querying of collections and database entities.
+- 🌐 **HTML, CSS, JavaScript, Bootstrap** – For building a modern, responsive UI.
+- 🔗 **Social Logins** – Integration with Google, Facebook, GitHub, LinkedIn, and Microsoft.
+- ✉️ **Email Services** – For password recovery via secure reset links.
+
+  
