@@ -25,7 +25,6 @@ The system supports **vendor management, secure user authentication, electronic 
 - 📊 **Efficient data handling** using LINQ, Entity Framework, and SQL Server.  
 
 ---
-
 ## 🛠️ Tools & Technologies
 
 - 🟣 **.NET 8 & ASP.NET MVC** – Core framework for building the web application.
@@ -38,4 +37,8 @@ The system supports **vendor management, secure user authentication, electronic 
 - 🔗 **Social Logins** – Integration with Google, Facebook, GitHub, LinkedIn, and Microsoft.
 - ✉️ **Email Services** – For password recovery via secure reset links.
 
-  
+## 🔗 Project Links
+
+- 🎥 **Project Demo Video:** [Watch on Video](https://www.linkedin.com/posts/abdalla-mohammed-03560a351_%D8%A7-megastor-multi-vendor-e-commerce-platform-activity-7371656505214885888-FDls?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFfVW6kBVRLKA3HxfGRJrDQIzRAAOk3Nq4g)  
+- 💼 **Project Post on LinkedIn:** [View on LinkedIn](https://www.linkedin.com/posts/abdalla-mohammed-03560a351_megastor-multi-vendor-e-commerce-platform-activity-7371551705999491073-m0t7?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFfVW6kBVRLKA3HxfGRJrDQIzRAAOk3Nq4g)
+
