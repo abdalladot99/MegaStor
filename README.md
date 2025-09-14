@@ -39,6 +39,7 @@ The system supports **vendor management, secure user authentication, electronic 
 
 ## 🔗 Project Links
 
-- 🎥 **Project Demo Video:** [Watch on Video](https://www.linkedin.com/posts/abdalla-mohammed-03560a351_%D8%A7-megastor-multi-vendor-e-commerce-platform-activity-7371656505214885888-FDls?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFfVW6kBVRLKA3HxfGRJrDQIzRAAOk3Nq4g)  
+- 🎥 **Project Demo Video:** [Watch on Video](https://www.linkedin.com/posts/abdalla-mohammed-03560a351_%D8%A7-megastor-multi-vendor-e-commerce-platform-activity-7371656505214885888-FDls?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFfVW6kBVRLKA3HxfGRJrDQIzRAAOk3Nq4g)
+- 🎥 **Project Demo :** [ Go Demo ](https://megastor.runasp.net/AccountSettings/Login)  
 - 💼 **Project Post on LinkedIn:** [View on LinkedIn](https://www.linkedin.com/posts/abdalla-mohammed-03560a351_megastor-multi-vendor-e-commerce-platform-activity-7371551705999491073-m0t7?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFfVW6kBVRLKA3HxfGRJrDQIzRAAOk3Nq4g)
 
